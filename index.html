@@ -1,2085 +1,602 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="color-scheme" content="light dark">
-<title>Пособие для техников по свету прокатных компаний.</title>
-<meta name="description" content="Интерактивное пособие для техников по свету прокатных компаний: простые объяснения, практические инструкции, безопасность, электрика, DMX/RDM, ArtNet/sACN, риггинг, программирование, чек листы и калькуляторы.">
-<style>
-/* ===== Премиальная тема, адаптация для мобильных (Samsung S25 Ultra / iPhone 16 Pro Max) ===== */
-:root{
-  /* Базовая цветовая схема (светлая тема) */
-  --bg: #fcfcfd;
-  --bg-2:#f4f6fb;
-  --bg-3:#eef1f7;
-  --text:#13151a;
-  --muted:#5c6570;
-  --primary:#6c63ff;   /* индиго-фиолет премиум-акцент */
-  --primary-2:#4437f2;
-  --accent:#12c2e9;    /* акцентная бирюза в градиентах */
-  --accent-2:#c471ed;  /* фиолетовый акцент для градиентов */
-  --gold:#d4af37;      /* «премиальное золото» для акцентов */
-  --warn:#ff8f00;
-  --danger:#e53935;
-  --ok:#2e7d32;
-  --border:#d8dde6;
-  --shadow: 0 12px 40px rgba(23,28,40,.12);
-  --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
-  --radius:16px;
-  --radius-sm:12px;
-  --radius-xs:10px;
-  --focus: 0 0 0 3px rgba(108, 99, 255, .28);
-
-  /* Премиальные градиенты */
-  --grad-1: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 50%, var(--primary) 100%);
-  --glass-bg: rgba(255,255,255,.55);
-  --glass-bg-2: rgba(255,255,255,.35);
-
-  /* Типографика: адаптивная + хорошая читабельность на больших экранах смартфонов */
-  --fs-base: clamp(16px, 1.05vw + 0.6rem, 19px);
-  --fs-h1: clamp(22px, 3.0vw + 0.6rem, 36px);
-  --fs-h2: clamp(19px, 2.4vw + 0.6rem, 30px);
-  --fs-h3: clamp(18px, 1.8vw + 0.6rem, 24px);
-  --fs-h4: clamp(16px, 1.4vw + 0.6rem, 19px);
-  --lh: 1.65;
-
-  /* Контентная ширина (ограничение строки для удобного чтения) */
-  --content-max: 1120px;
-  --content-pad: max(16px, env(safe-area-inset-left)) max(16px, env(safe-area-inset-right));
-}
-
-:root[data-theme="dark"]{
-  --bg:#0c0f14;
-  --bg-2:#0f131a;
-  --bg-3:#151a23;
-  --text:#e8ecf3;
-  --muted:#aab4c1;
-  --primary:#9aa3ff;
-  --primary-2:#7e86ff;
-  --accent:#2ac6e9;
-  --accent-2:#a577ff;
-  --gold:#e6c35a;
-  --warn:#ffb74d;
-  --danger:#ff6b6b;
-  --ok:#75d06a;
-  --border:#273142;
-  --shadow: 0 14px 46px rgba(0,0,0,.58);
-  --glass-bg: rgba(14,17,22,.48);
-  --glass-bg-2: rgba(14,17,22,.32);
-}
-
-*{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%; text-size-adjust:100%}
-html,body{height:100%}
-body{
-  margin:0;
-  color:var(--text);
-  background:
-    radial-gradient(1200px 600px at 10% -10%, rgba(108,99,255,.12), transparent 60%),
-    radial-gradient(1000px 600px at 110% 10%, rgba(18,194,233,.10), transparent 55%),
-    radial-gradient(800px 500px at 20% 110%, rgba(196,113,237,.10), transparent 55%),
-    var(--bg);
-  font-family: system-ui,-apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
-  font-size: var(--fs-base);
-  line-height: var(--lh);
-  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
-  padding-bottom: env(safe-area-inset-bottom);
-  overflow-x:hidden;   /* исключаем горизонтальный скролл на телефонах */
-}
-h1{font-size:var(--fs-h1); line-height:1.25; letter-spacing:.2px}
-h2{font-size:var(--fs-h2); line-height:1.28; letter-spacing:.2px}
-h3{font-size:var(--fs-h3)}
-h4{font-size:var(--fs-h4)}
-p,li{max-width:75ch; hyphens:auto}
-img,svg,video{max-width:100%; height:auto}
-a{color:var(--primary); text-decoration:none; word-break:break-word}
-a:hover{text-decoration:underline}
-code,kbd,pre,samp{font-family:var(--mono); font-size:.94em}
-pre{
-  background:var(--glass-bg-2);
-  -webkit-backdrop-filter:saturate(120%) blur(8px);
-  backdrop-filter:saturate(120%) blur(8px);
-  padding:14px;
-  border-radius:var(--radius-sm);
-  overflow:auto;
-  border:1px solid var(--border)
-}
-
-/* SVG: текст следует теме (светлая/тёмная) */
-svg{ color: var(--text); }
-svg text{ fill: var(--text); stroke: none; }
-
-/* ===== Макет приложения: премиальный AppBar + боковая навигация ===== */
-.app{
-  display:grid;
-  grid-template-columns: 320px 1fr;
-  grid-template-rows: 72px 1fr;
-  grid-template-areas:
-    "top top"
-    "nav main";
-  min-height:100dvh;
-}
-@media (max-width:1100px){
-  .app{grid-template-columns: 1fr; grid-template-areas:"top" "main"}
-}
-
-/* Премиальный AppBar с «стеклом» и градиентной линией */
-header.appbar{
-  grid-area:top; position:sticky; top:0; z-index:50;
-  background: linear-gradient(180deg, rgba(255,255,255,.18) 0%, rgba(255,255,255,.08) 100%);
-  -webkit-backdrop-filter: saturate(140%) blur(14px);
-  backdrop-filter: saturate(140%) blur(14px);
-  border-bottom:1px solid var(--border);
-  display:flex; align-items:center; gap:12px;
-  padding:10px calc(16px + env(safe-area-inset-right)) 10px calc(16px + env(safe-area-inset-left));
-}
-.brand{display:flex; align-items:center; gap:14px; min-width:0}
-.brand .logo{
-  width:42px; height:42px; border-radius:12px; display:grid; place-items:center;
-  background: var(--grad-1);
-  border:1px solid rgba(255,255,255,.38);
-  box-shadow: var(--shadow);
-  color:white;
-}
-.brand h1{font-size:18px; margin:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
-small.muted{color:var(--muted)}
-
-.searchbox{flex:1; display:flex; align-items:center; gap:10px; min-width:0}
-.searchbox input{
-  width:100%; padding:12px 14px 12px 42px; border-radius:12px;
-  border:1px solid var(--border);
-  background:var(--glass-bg-2);
-  -webkit-backdrop-filter:saturate(120%) blur(6px);
-  backdrop-filter:saturate(120%) blur(6px);
-  color:var(--text); outline:none; min-width:0;
-  transition: border-color .2s ease, box-shadow .2s ease;
-}
-.searchbox input:focus{border-color:var(--primary); box-shadow:var(--focus)}
-.searchbox .icon{position:relative; left:34px; color:var(--muted)}
-
-.app-actions{display:flex; align-items:center; gap:10px; flex-wrap:nowrap}
-@media (max-width:600px){
-  .app-actions #expandAll{display:none}
-}
-.btn{
-  appearance:none; border:1px solid var(--border); background:var(--glass-bg); color:var(--text);
-  border-radius:12px; padding:10px 14px; cursor:pointer; transition:.2s all ease; display:inline-flex; align-items:center; gap:8px; max-width:100%
-}
-.btn:hover{box-shadow:var(--focus)}
-.btn.ghost{background:transparent}
-.btn.primary{
-  background:var(--grad-1); color:white; border-color:transparent;
-  box-shadow: 0 6px 18px rgba(108,99,255,.28)
-}
-.btn.icon{padding:9px; width:42px; height:42px; justify-content:center}
-
-/* Боковая навигация */
-nav.sidebar{
-  grid-area:nav; position:sticky; top:72px; align-self:start; height:calc(100dvh - 72px);
-  border-right:1px solid var(--border);
-  background: linear-gradient(180deg, var(--glass-bg) 0%, var(--glass-bg-2) 100%);
-  -webkit-backdrop-filter: saturate(140%) blur(10px);
-  backdrop-filter: saturate(140%) blur(10px);
-  overflow:auto; padding:14px;
-}
-@media (max-width:1100px){
-  nav.sidebar{display:none; position:fixed; top:72px; left:0; right:0; height:calc(100dvh - 72px); z-index:60}
-  nav.sidebar.open{display:block}
-}
-.nav-group{margin-bottom:10px; border:1px solid var(--border); border-radius:var(--radius-sm); overflow:hidden}
-.nav-group summary{
-  cursor:pointer; padding:12px 14px; background:var(--bg-3); list-style:none; font-weight:600; letter-spacing:.2px
-}
-.nav-group summary::-webkit-details-marker{display:none}
-.nav-group[open] summary{background:var(--bg-2)}
-.nav-group ul{margin:0; padding:6px 0 10px 0; list-style:none}
-.nav-group a{
-  display:block; padding:10px 14px 10px 20px; border-left:3px solid transparent; color:var(--text); border-radius:0
-}
-.nav-group a:hover{background:var(--bg); border-left-color:var(--primary)}
-.nav-group a.active{
-  background: linear-gradient(90deg, rgba(108,99,255,.10), transparent 60%);
-  border-left-color:var(--gold);
-  font-weight:600;
-}
-
-/* Контент (без блока оглавления) */
-main.content{
-  grid-area:main; padding:18px;
-}
-.article{
-  background: linear-gradient(180deg, var(--glass-bg) 0%, var(--glass-bg-2) 100%);
-  -webkit-backdrop-filter: saturate(140%) blur(12px);
-  backdrop-filter: saturate(140%) blur(12px);
-  border:1px solid var(--border); border-radius:var(--radius);
-  padding: clamp(16px, 1.2vw + 14px, 28px);
-  margin: 0 auto;
-  max-width: min(var(--content-max), calc(100vw - 32px));
-  box-shadow: var(--shadow);
-  overflow-wrap:anywhere;
-}
-.article h2{margin-top:2px}
-.section{margin-bottom:38px}
-.section h2{margin:10px 0 10px}
-.section h3{margin:22px 0 8px}
-.section h4{margin:18px 0 6px}
-.lead{color:var(--muted)}
-
-.card{
-  background: linear-gradient(180deg, var(--bg-2), var(--bg-3));
-  border:1px solid var(--border); border-radius:var(--radius-sm); padding:14px; margin:12px 0;
-  overflow-wrap:anywhere;
-}
-.card .title{font-weight:700; margin-bottom:6px}
-.callout{border-left:4px solid var(--primary); padding-left:12px}
-.warn{border-left-color:var(--warn)}
-.danger{border-left-color:var(--danger)}
-.ok{border-left-color:var(--ok)}
-.grid-2{display:grid; grid-template-columns: 1fr 1fr; gap:16px}
-.grid-2>*{min-width:0}
-@media (max-width:880px){.grid-2{grid-template-columns:1fr}}
-
-.figure{
-  background:var(--bg-2); border:1px solid var(--border); border-radius:var(--radius-sm);
-  overflow:auto; padding:8px; margin:12px 0
-}
-.figure figcaption{font-size:0.9em; color:var(--muted); margin-top:6px}
-
-kbd{background:var(--bg-3); border:1px solid var(--border); border-bottom-width:2px; border-radius:8px; padding:2px 8px}
-
-/* Tooltip/Popover — премиальная подложка */
-.tooltip, .popover{
-  position:fixed; max-width:min(460px, 90vw);
-  background: linear-gradient(180deg, var(--glass-bg), var(--glass-bg-2));
-  -webkit-backdrop-filter: saturate(140%) blur(12px);
-  backdrop-filter: saturate(140%) blur(12px);
-  color:var(--text); border:1px solid var(--border); border-radius:14px; padding:12px 14px; box-shadow:var(--shadow); z-index:100
-}
-.tooltip{font-size:0.9em}
-.popover .title{font-weight:700; margin-bottom:6px}
-sup.footnote-ref{cursor:pointer; color:var(--primary)}
-.term{border-bottom:1px dotted var(--muted); cursor:help}
-
-/* Badges/Chips */
-.badge{
-  display:inline-flex; align-items:center; gap:6px; padding:4px 10px; border:1px solid var(--border); border-radius:999px; font-size:0.9em; background:var(--bg-2)
-}
-.chips{display:flex; gap:8px; flex-wrap:wrap}
-.chip{padding:6px 10px; border-radius:999px; border:1px solid var(--border); background:var(--bg-2); font-size:0.95em}
-
-/* Разделители */
-hr{border:none; border-top:1px solid var(--border); margin:18px 0}
-
-/* Таблицы: скролл без «выезжания» за экран */
-.table{
-  width:100%; border-collapse:collapse; overflow:hidden; border-radius:12px;
-  border:1px solid var(--border); display:block; overflow-x:auto; -webkit-overflow-scrolling:touch
-}
-.table th,.table td{padding:10px; border-bottom:1px solid var(--border); text-align:left; white-space:nowrap}
-.table tr:nth-child(odd){background:var(--bg-2)}
-@media (max-width:520px){
-  .table th,.table td{white-space:normal}
-}
-
-/* Формы/инпуты */
-.form-row{display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end}
-.form-row label{display:flex; flex-direction:column; gap:6px; flex:1 1 220px; min-width:0}
-@media (max-width:600px){
-  .form-row label{flex:1 1 100%}
-}
-input[type="number"], input[type="text"], select{
-  padding:12px; border:1px solid var(--border); border-radius:12px; background:var(--bg); color:var(--text); outline:none; width:100%;
-  min-height:46px; transition:border-color .2s ease, box-shadow .2s ease;
-}
-input[type="number"]:focus, input[type="text"]:focus, select:focus{border-color:var(--primary); box-shadow:var(--focus)}
-.output{
-  background:var(--bg-2);
-  border:1px dashed var(--border); padding:12px; border-radius:12px; min-height:50px; display:flex; align-items:center
-}
-
-/* Викторины */
-.quiz{border:1px solid var(--border); border-radius:14px; padding:12px; background:var(--bg-2)}
-.quiz .q{margin:12px 0}
-.quiz .q h4{margin:0 0 8px}
-.quiz .q label{display:block; padding:8px 10px; border-radius:10px; cursor:pointer}
-.quiz .q input{margin-right:8px}
-.quiz .result{margin-top:10px; font-weight:700}
-
-/* Подвал */
-footer{padding:20px; color:var(--muted); text-align:center}
-
-/* Утилиты */
-.hidden{display:none !important}
-
-/* Анимации/движение */
-@media (prefers-reduced-motion: reduce){
-  *{scroll-behavior:auto !important; transition:none !important; animation:none !important}
-  
-}
-</style>
+  <meta charset="utf-8" />
+  <title>Техник по световому концертному оборудованию в прокате: российская практика, процессы, безопасность и международный контекст</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Большой обзор профессии техника по свету в прокатных компаниях: процессы, оборудование, протоколы, безопасность в РФ, карьера, препродакшн, кейсы из России и международные практики.">
 </head>
 <body>
-<div class="app" id="app">
-  <header class="appbar">
-    <button class="btn icon ghost" id="menuToggle" aria-label="Открыть меню" title="Меню">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-    </button>
-    <div class="brand">
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   width="130"
-   height="45"
-   viewBox="0 0 27.25176 11.906786"
-   version="1.1"
-   id="svg28"
-   sodipodi:docname="handbook.svg"
-   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
-  <defs
-     id="defs32">
-    <inkscape:perspective
-       sodipodi:type="inkscape:persp3d"
-       inkscape:vp_x="0 : 6.3502859 : 1"
-       inkscape:vp_y="0 : 1000 : 0"
-       inkscape:vp_z="34.660008 : 6.3502859 : 1"
-       inkscape:persp3d-origin="17.330004 : 4.4981191 : 1"
-       id="perspective1191" />
-  </defs>
-  <sodipodi:namedview
-     id="namedview30"
-     pagecolor="#505050"
-     bordercolor="#eeeeee"
-     borderopacity="1"
-     inkscape:showpageshadow="0"
-     inkscape:pageopacity="0"
-     inkscape:pagecheckerboard="0"
-     inkscape:deskcolor="#505050"
-     showgrid="false"
-     inkscape:zoom="7.2761828"
-     inkscape:cx="76.482411"
-     inkscape:cy="27.48694"
-     inkscape:window-width="1920"
-     inkscape:window-height="1057"
-     inkscape:window-x="1912"
-     inkscape:window-y="-8"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="svg28" />
-  <path
-     style="fill:#cd0000;fill-opacity:1;stroke:none;stroke-width:0.0415945;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="m 7.7904925,8.8854168 c 0,0 0.4114131,0.5464918 0.5910854,0.8397481 C 8.797391,9.8907684 9.6634851,10.250956 10.256037,10.43864 L 8.9829303,9.5505911 c -0.081403,0.052441 -0.2390743,0.015181 -0.3190101,-0.0414 -0.099737,-0.071072 -0.2178069,-0.273936 -0.1408045,-0.3657078 0.076269,-0.091082 0.3109432,-0.03795 0.4106797,0.033122 0.078469,0.055891 0.1642719,0.186994 0.1320042,0.2725557 l 1.2452394,0.925998 C 9.9700281,9.8886984 9.1054008,8.8895569 9.1054008,8.8895569 l -1.1792372,-0.46714 z"
-     id="path4" />
-  <path
-     style="fill:#cd0000;fill-opacity:1;stroke:none;stroke-width:0.0415946;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="m 6.347247,6.8795439 0.9724307,0.7410757 0.029335,-1.1288641 c 1.5862502,-0.03864 2.6034157,-1.2302965 2.6034157,-2.6565571 0,-1.4255705 -1.083901,-2.566165 -2.6701512,-2.6041158 L 7.2742096,0.95783678 6.3685143,0.57970861 Z m 0.9650971,-4.608609 c 0.9174291,0.022081 1.6177845,0.7203754 1.6573858,1.5615035 0.028601,0.9522204 -0.684955,1.6104946 -1.6133844,1.6953665 z"
-     id="path6" />
-  <path
-     style="fill:#cd0000;fill-opacity:1;stroke:none;stroke-width:0.0415946;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="M 5.1760767,0.12429888 3.0515428,4.421021 3.7687654,4.9730328 5.0888071,2.8698678 5.1863437,5.9921847 6.1287069,6.7236004 V 0.48724662 C 5.8265638,0.37546419 5.6263575,0.28714233 5.1753433,0.12429888 Z M 2.4091225,5.6368272 0.39752554,9.6168326 2.233117,7.7510324 3.0764769,6.0929269 Z m 2.8131556,1.8733901 0.044001,1.0081116 0.8660941,2.1549171 -0.018335,-2.5571956 z"
-     id="path8" />
-  <path
-     style="fill:#cd0000;fill-opacity:1;stroke:none;stroke-width:0.0415945;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="M 0.42759315,2.8243268 0.14011741,3.7986276 7.5954198,8.843326 7.7875592,8.2154125 Z"
-     id="path10" />
-  <text
-     xml:space="preserve"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.51704px;font-family:'GOST Type BU';-inkscape-font-specification:'GOST Type BU, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#cd0000;fill-opacity:1;stroke-width:0.0190686"
-     x="12.983296"
-     y="4.2592263"
-     id="text18"
-     transform="scale(0.86891052,1.1508665)"><tspan
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.51704px;font-family:'GOST Type BU';-inkscape-font-specification:'GOST Type BU, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#cd0000;fill-opacity:1;stroke-width:0.0190686"
-       x="12.983296"
-       y="4.2592263"
-       id="tspan16">Пособие</tspan></text>
-  <text
-     xml:space="preserve"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.10333px;font-family:'GOST Type BU';-inkscape-font-specification:'GOST Type BU, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#cd0000;fill-opacity:1;stroke-width:0.0190686"
-     x="13.233961"
-     y="6.893436"
-     id="text22"
-     transform="scale(0.86891052,1.1508665)"><tspan
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.10333px;font-family:'GOST Type BU';-inkscape-font-specification:'GOST Type BU, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#cd0000;fill-opacity:1;stroke-width:0.0190686"
-       x="13.233961"
-       y="6.893436"
-       id="tspan20">для техников</tspan></text>
-  <text
-     xml:space="preserve"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.10333px;font-family:'GOST Type BU';-inkscape-font-specification:'GOST Type BU, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#cd0000;fill-opacity:1;stroke-width:0.0190686"
-     x="13.244657"
-     y="9.340641"
-     id="text22-6"
-     transform="scale(0.86891052,1.1508665)"><tspan
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.10333px;font-family:'GOST Type BU';-inkscape-font-specification:'GOST Type BU, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#cd0000;fill-opacity:1;stroke-width:0.0190686"
-       x="13.244657"
-       y="9.340641"
-       id="tspan20-9">по свету v2.6</tspan></text>
-  <text
-     xml:space="preserve"
-     style="font-weight:700;font-size:32.4552px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';fill:#ffffff;stroke-width:0.105832"
-     x="48.465244"
-     y="9.7748241"
-     id="text26"><tspan
-       style="stroke-width:0.105832"
-       x="48.465244"
-       y="9.7748241"
-       id="tspan24"> </tspan></text>
-</svg>
-
-
-
-
-
-      <div style="display:flex; flex-direction:column; min-width:0">
-      </div>
-    </div>
-    <div class="searchbox">
-      <span class="icon" aria-hidden="true">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M20 20l-3-3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-      </span>
-      <input id="search" type="text" placeholder="Поиск" autocomplete="off">
-    </div>
-    <div class="app-actions">
-      <button class="btn icon ghost" id="themeToggle" aria-label="Переключить тему" title="Светлая/тёмная тема">
-        <svg id="themeIcon" width="22" height="22" viewBox="0 0 24 24" fill="none">
-          <path id="sun" d="M12 4v2M12 18v2M4 12H2M22 12h-2M5.64 5.64L4.22 4.22M19.78 19.78l-1.42-1.42M18.36 5.64l1.42-1.42M4.22 19.78l1.42-1.42" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/>
-        </svg>
-      </button>
-      <button class="btn ghost" id="expandAll" title="Развернуть/свернуть разделы">Развернуть разделы</button>
-    </div>
+<article id="lighting-tech-overview">
+  <header>
+    <h1>Техник по световому концертному оборудованию в прокате: российская практика, процессы, безопасность и международный контекст</h1>
+    <p><strong>Аудитория:</strong> техники по свету, бригадиры, продакшн-менеджеры, студенты, HR прокатных компаний, руководители площадок.</p>
+    <p><strong>Цель:</strong> системное понимание профессии, инструментов и процессов; реальные практики, риски, карьерные треки и тренды.</p>
+    <p><strong>Справка:</strong> ссылки ведут на первичные источники и официальные страницы производителей/организаций. Проверяйте актуальность требований и версий документов на момент применения.</p>
+    <p><small>Дата составления: 2025-09-10</small></p>
   </header>
 
-  <!-- Только блок разделов слева (Оглавление справа убрано) -->
-  <nav class="sidebar" id="sidebar">
-    <!-- Новая кнопка "Смотреть все" в начале меню -->
-    <div class="nav-actions" style="padding:0 0 10px 0;">
-      <button class="btn primary" id="showAllSections" style="width:100%">Смотреть все</button>
-    </div>
-
-    <details class="nav-group" open>
-      <summary>О пособии и навигация</summary>
-      <ul>
-        <li><a href="#intro" class="nav-link">Введение</a></li>
-        <li><a href="#howto" class="nav-link">Как пользоваться</a></li>
-        <li><a href="#glossary" class="nav-link">Глоссарий</a></li>
-        <li><a href="#checklists" class="nav-link">Чек‑листы</a></li>
-      </ul>
-    </details>
-    <details class="nav-group" open>
-      <summary>Физика света и фотометрия</summary>
-      <ul>
-        <li><a href="#light-basics" class="nav-link">Основы света</a></li>
-        <li><a href="#photometry" class="nav-link">Фотометрия</a></li>
-        <li><a href="#color-science" class="nav-link">Цвет и спектр</a></li>
-      </ul>
-    </details>
-    <details class="nav-group" open>
-      <summary>Электрика и безопасность</summary>
-      <ul>
-        <li><a href="#power-rf" class="nav-link">Сети и распределение</a></li>
-        <li><a href="#safety" class="nav-link">Электробезопасность</a></li>
-        <li><a href="#ip-rating" class="nav-link">IP‑степени и погода</a></li>
-      </ul>
-    </details>
-    <details class="nav-group" open>
-      <summary>Приборы и оптика</summary>
-      <ul>
-        <li><a href="#fixtures" class="nav-link">Типы приборов</a></li>
-        <li><a href="#optics" class="nav-link">Оптика, зум, гобы</a></li>
-        <li><a href="#led" class="nav-link">LED и драйверы</a></li>
-      </ul>
-    </details>
-    <details class="nav-group" open>
-      <summary>Управление и протоколы</summary>
-      <ul>
-        <li><a href="#dmx" class="nav-link">DMX/RDM</a></li>
-        <li><a href="#network" class="nav-link">Art‑Net / sACN</a></li>
-        <li><a href="#patch" class="nav-link">Патч и адресация</a></li>
-      </ul>
-    </details>
-    <details class="nav-group" open>
-      <summary>Риггинг и механика</summary>
-      <ul>
-        <li><a href="#truss" class="nav-link">Фермы и нагрузки</a></li>
-        <li><a href="#hoists" class="nav-link">Тали и подъём</a></li>
-        <li><a href="#rig-safety" class="nav-link">Такелажная безопасность</a></li>
-      </ul>
-    </details>
-    <details class="nav-group" open>
-      <summary>Рабочий процесс</summary>
-      <ul>
-        <li><a href="#planning" class="nav-link">Планирование</a></li>
-        <li><a href="#setup" class="nav-link">Монтаж и пусконаладка</a></li>
-        <li><a href="#programming" class="nav-link">Программирование и шоу</a></li>
-        <li><a href="#operation" class="nav-link">Эксплуатация и резерв</a></li>
-        <li><a href="#maintenance" class="nav-link">ТО и хранение</a></li>
-      </ul>
-    </details>
-    <details class="nav-group" open>
-      <summary>Инструменты</summary>
-      <ul>
-        <li><a href="#calc" class="nav-link">Калькуляторы</a></li>
-        <li><a href="#quizzes" class="nav-link">Тесты и тренажёры</a></li>
-        <li><a href="#refs" class="nav-link">Нормативы и источники</a></li>
-      </ul>
-    </details>
+  <nav class="toc" aria-label="Содержание">
+    <h2>Содержание</h2>
+    <ol>
+      <li><a href="#intro">Введение: роль техника по свету</a></li>
+      <li><a href="#lifecycle">Жизненный цикл проекта в прокате</a></li>
+      <li><a href="#gear">Оборудование и инфраструктура</a></li>
+      <li><a href="#protocols">Протоколы и сетевые практики</a></li>
+      <li><a href="#safety-ru">Безопасность и правовое поле (РФ)</a></li>
+      <li><a href="#skills-career">Компетенции и карьера</a></li>
+      <li><a href="#preproduction">Инструменты планирования и препродакшна</a></li>
+      <li><a href="#ru-cases">Российская практика и кейсы</a></li>
+      <li><a href="#intl-context">Международный контекст</a></li>
+      <li><a href="#trends-bp">Тренды и best practices</a></li>
+      <li><a href="#checklists">Чек-листы (склад/площадка/шоу)</a></li>
+      <li><a href="#diagnostics">Мини-гид по диагностике DMX/RDM/Art-Net/sACN</a></li>
+      <li><a href="#upskill">Как прокачаться за 3–6 месяцев</a></li>
+      <li><a href="#glossary">Глоссарий (RU/EN)</a></li>
+      <li><a href="#next">Куда дальше: ссылки и ресурсы</a></li>
+    </ol>
   </nav>
 
-  <main class="content">
-    <article class="article">
-      <!-- Введение -->
-      <section class="section" id="intro">
-        <h2>Введение</h2>
-        <p class="lead">
-          Это пособие — «швейцарский нож» для техников по свету. Сложное объясняем понятным языком и сразу даём практику.
-        </p>
-        <div class="card callout">
-          <div class="title">Для кого</div>
-          <ul>
-            <li>Начинающие техники — быстрый вход в профессию без «страшной» теории.</li>
-            <li>Роуди/универсалы — сжатые инструкции и чек‑листы, чтобы не ошибиться.</li>
-            <li>Опытные специалисты — памятка и набор калькуляторов/процедур.</li>
-          </ul>
-        </div>
-        <div class="card">
-          <div class="title">Что внутри</div>
-          <ul>
-            <li>Практические установки для разных площадок: клуб, зал, арена, open‑air.</li>
-            <li>Электрика и безопасность без перегруза формулами — только нужное.</li>
-            <li>Патч/DMX/RDM и сеть (Art‑Net/sACN) — как быстро и правильно настроить.</li>
-            <li>Риггинг: простые расчёты, безопасные подходы, реальные кейсы.</li>
-            <li>Чек‑листы, мини‑шаблоны документов, расширенный глоссарий.</li>
-          </ul>
-        </div>
-        <div class="chips">
-          <span class="chip">DMX512‑A</span>
-          <span class="chip">RDM</span>
-          <span class="chip">Art‑Net</span>
-          <span class="chip">sACN</span>
-          <span class="chip">ПУЭ/ПТЭЭП</span>
-          <span class="chip">Трёхфазное питание</span>
-          <span class="chip">Риггинг</span>
-          <span class="chip">Фотометрия</span>
-        </div>
-      </section>
+  <section id="intro">
+    <h2>1) Введение: кто такой техник по свету в прокатной компании</h2>
+    <p>Техник по световому концертному оборудованию (lighting technician) — ключевой участник команды прокатной компании, отвечающий за подготовку, монтаж, конфигурацию, тестирование, безопасную эксплуатацию и базовый сервис осветительной системы на мероприятии. Задача техника — чтобы каждый прибор и каждый патч работали предсказуемо и стабильно, а оператор/LD мог сосредоточиться на художественной части.</p>
 
-      <!-- Как пользоваться -->
-      <section class="section" id="howto">
-        <h2>Как пользоваться пособием</h2>
-        <ul>
-          <li>Меню слева — разделы. На телефоне нажмите кнопку «Меню» вверху.</li>
-          <li>Поиск: введите слово и нажмите Enter. В результатах тапните по заголовку.</li>
-          <li>Подсказки: термины с пунктиром (например, <span class="term" data-term="dmx">DMX</span>) можно тапнуть.</li>
-          <li>Калькуляторы считают автоматически.</li>
-          <li>Офлайн: после первой загрузки большинство функций работает без интернета.</li>
-          <li>Горячие клавиши (ПК): / — поиск, t — тема, m — меню.</li>
-        </ul>
-        <div class="card ok">
-          <div class="title">Совет по мобильной читабельности</div>
-          Если на телефоне хочется крупнее — увеличьте системный размер шрифта. Пособие уважает настройки доступности и корректно подстраивается.
-        </div>
-      </section>
+    <h3>Роли и разграничение ответственности</h3>
+    <ul>
+      <li><strong>Техник по свету:</strong> монтаж/подвес приборов, адресация DMX/RDM, сетевой патч (Art‑Net/sACN), тесты, обслуживание.</li>
+      <li><strong>Диммер-техник (dimmer tech):</strong> силовая часть, дистрибуция, реле/диммеры, безопасность питания.</li>
+      <li><strong>Системный инженер по свету (system/lighting network engineer):</strong> проектирование топологии, VLAN/IGMP, резервирование, мониторинг.</li>
+      <li><strong>Бригадир (crew chief):</strong> организация работ бригады, контроль сроков, взаимодействие с подрядчиками.</li>
+      <li><strong>Светооператор/программист/LD:</strong> креативная концепция, программирование, ведение шоу.</li>
+    </ul>
+    <p>См. обучающие платформы производителей: MA Lighting University (<a href="https://www.malighting.com/training/ma-university/" target="_blank" rel="noopener">malighting.com/training/ma-university</a>), Avolites Academy (<a href="https://www.avolites.com/academy/" target="_blank" rel="noopener">avolites.com/academy</a>), ChamSys Training (<a href="https://chamsyslighting.com/pages/training" target="_blank" rel="noopener">chamsyslighting.com/pages/training</a>), ETC Learning Stage (<a href="https://training.etcconnect.com/" target="_blank" rel="noopener">training.etcconnect.com</a>).</p>
 
-      <!-- Основы света -->
-      <section class="section" id="light-basics">
-        <h2>Основы света</h2>
-        <div class="grid-2">
-          <div>
-            <h3>Как «видит» зритель</h3>
-            <ul>
-              <li>Контраст и контуры важнее «ваттов»: контровик отделяет артиста от фона.</li>
-              <li>Чем дальше прибор, тем меньше света на объекте — <b>свет падает очень быстро</b> (обратные квадраты).</li>
-              <li>Равномерный фронт из 2–4 приборов обычно лучше одного мощного прожектора.</li>
-            </ul>
-            <div class="card">
-              <div class="title">Практика: быстрый базовый сет</div>
-              Малый клуб: 4×LED PAR (фронт на лица под 30–45°), 2×контровик (чуть холоднее), 4×батона/баров на задник. Дым/хейз — минимум для «воздуха».
-            </div>
-            <h3>Слои света</h3>
-            <ul>
-              <li>Ключевой (30–45° сверху) — формирует лицо и объём.</li>
-              <li>Заполняющий — убирает «дыры» в тенях, но не «убивает» объём.</li>
-              <li>Контровой — рисует контур, блеск волос и «разделяет» план.</li>
-              <li>Фон/декор — настроением управляет задник и архитектура.</li>
-            </ul>
-          </div>
-          <figure class="figure">
-            <svg viewBox="0 0 600 220" width="100%" height="180" aria-label="Закон обратных квадратов">
-              <rect x="0" y="0" width="600" height="220" fill="none"/>
-              <circle cx="70" cy="110" r="24" fill="#ffcc00" stroke="currentColor"/>
-              <text x="40" y="30" font-size="12">Источник</text>
-              <line x1="94" y1="110" x2="240" y2="110" stroke="#6c63ff" stroke-width="2"/>
-              <line x1="94" y1="110" x2="420" y2="110" stroke="#6c63ff" stroke-width="2"/>
-              <rect x="220" y="90" width="40" height="40" fill="#bbdefb" stroke="currentColor"/>
-              <rect x="400" y="90" width="40" height="40" fill="#c8e6c9" stroke="currentColor"/>
-              <text x="220" y="80" font-size="12">d</text>
-              <text x="400" y="80" font-size="12">2d</text>
-              <text x="210" y="150" font-size="12">E = I/d²</text>
-              <text x="375" y="150" font-size="12">E/4</text>
-            </svg>
-            <figcaption>При удвоении расстояния освещённость падает в четыре раза. Выгоднее работать ближе и «шире».</figcaption>
-          </figure>
-        </div>
+    <h3>Где работают техники</h3>
+    <p>Клубы, арены, фестивали, корпоративы, ТВ/стримы, театры, временные инсталляции. Тренды по парку: рост доли IP65-приборов, сетевые инфраструктуры, беспроводные линковки — отражено в экспозициях и материалах <a href="https://prolight-sound.com/" target="_blank" rel="noopener">Prolight + Sound</a>.</p>
 
-        <div class="card warn">
-          <div class="title">Частые ошибки</div>
-          <ul>
-            <li>Нет контровика — картинка «плоская» и сливается с фоном.</li>
-            <li>Слишком низкий фронт — слепит зрителей и даёт длинные тени.</li>
-            <li>Чрезмерно широкий зум — пятно «расползается», света не хватает.</li>
-          </ul>
-        </div>
+    <h3>Российская практика vs зарубежная</h3>
+    <ul>
+      <li>В РФ часто «смешанные роли»: техник совмещает функции сетевика, диммер-техника и частично сервиса — особенно в регионах.</li>
+      <li>На международных продакшнах роли обычно разделены, стандарты и документация стандартизированы по ESTA/PLASA (<a href="https://tsp.esta.org/" target="_blank" rel="noopener">ESTA TSP</a>), практики крупных прокатчиков: <a href="https://www.prg.com/" target="_blank" rel="noopener">PRG</a>, <a href="https://solotech.com/" target="_blank" rel="noopener">Solotech</a>, <a href="https://negearth.co.uk/" target="_blank" rel="noopener">Neg Earth</a>.</li>
+      <li>Регуляторика РФ по охране труда и электробезопасности имеет свои обязательные требования (см. раздел «Безопасность и правовое поле»).</li>
+    </ul>
+  </section>
 
-        <div class="card">
-          <div class="title">Практика: быстрый сетап для речи</div>
-          Малый зал: 2 профиля на лицо (3200–4000K), 1–2 контровика чуть холоднее (5600K), мягкий заполняющий с фростом, спокойный задник (низкая насыщенность).
-        </div>
-      </section>
+  <section id="lifecycle">
+    <h2>2) Жизненный цикл проекта в прокате</h2>
+    <h3>От райдера до возврата со склада</h3>
+    <ol>
+      <li><strong>Препродакшн:</strong> чтение райдера, составление спецификаций и схем подвеса, сверка наличия, резервирование, логистика и тайминг, согласование с площадкой и риггинг-подрядчиком. Отраслевые медиа и методические материалы: <a href="https://lightsoundnews.com/ru/" target="_blank" rel="noopener">LightSoundNews</a>, <a href="https://showtech.ru/" target="_blank" rel="noopener">Showtech</a>, журнал «<a href="https://scena-ru.com/" target="_blank" rel="noopener">Сцена</a>».</li>
+      <li><strong>Склад:</strong> функциональная проверка приборов, обновления прошивок по мануалам производителей (<a href="https://www.robe.cz/downloads" target="_blank" rel="noopener">Robe</a>, <a href="https://www.claypaky.com/" target="_blank" rel="noopener">Claypaky</a>, <a href="https://www.chauvetprofessional.com/downloads/" target="_blank" rel="noopener">Chauvet Professional</a>), комплектация кейсов и маркировка.</li>
+      <li><strong>Площадка:</strong> разгрузка, сборка, подвес совместно с риггерами, прокладка питания и сетей, адресация и патч, тестирование, репетиции, шоу.</li>
+      <li><strong>Постпроцесс:</strong> демонтаж, диагностика, сервис, отчётность, возврат оборудования на склад.</li>
+    </ol>
 
-      <!-- Фотометрия -->
-      <section class="section" id="photometry">
-        <h2>Фотометрия</h2>
-        <div class="grid-2">
-          <div>
-            <h3>Три главных величины</h3>
-            <ul>
-              <li>Люмен (lm) — общий поток света источника.</li>
-              <li>Кандела (cd) — сила света в направлении, «пробой луча».</li>
-              <li>Люкс (lx) — сколько света приходит на поверхность (1 лк = 1 лм/м²).</li>
-            </ul>
-            <div class="card">
-              <div class="title">Как читать спецификации</div>
-              «50 000 лк @ 5 м» означает центр пятна в 50 000 люкс на дистанции 5 м. На 10 м будет ≈ 12 500 лк.
-            </div>
-            <h3>Быстрые формулы</h3>
-            <ul>
-              <li>E ≈ I / d² (лк, кд, м) — оценка центра луча.</li>
-              <li>D ≈ 2 d tan(θ/2) — диаметр пятна для угла θ (beam).</li>
-            </ul>
-          </div>
-          <div class="card" data-calc="ilux">
-            <h3>Калькулятор: освещённость из силы света</h3>
-            <div class="form-row">
-              <label>Сила света I (кд)
-                <input type="number" id="i_cd" value="50000" step="100">
-              </label>
-              <label>Дистанция d (м)
-                <input type="number" id="d_m" value="10" step="0.1" min="0">
-              </label>
-            </div>
-            <div class="output" id="e_lux">E = … лк</div>
-          </div>
-        </div>
+    <h3>Практические советы по документообороту и контролю изменений</h3>
+    <ul>
+      <li>Единый «живой» патч-лист (DMX, Art‑Net/sACN, IP) с версионированием и датой/временем последней правки.</li>
+      <li>Фотофиксация подключений, площадочных особенностей, нестандартных решений для последующих мероприятий.</li>
+      <li>Резервные копии шоу-файлов, профилей приборов и сетевых конфигов в облаке и на физическом носителе.</li>
+    </ul>
+  </section>
 
-        <div class="card" data-calc="diameter">
-          <h3>Калькулятор: диаметр пятна</h3>
-          <div class="form-row">
-            <label>Расстояние d (м)
-              <input type="number" id="d2_m" value="15" step="0.1" min="0">
-            </label>
-            <label>Угол θ (°)
-              <input type="number" id="theta2" value="12" step="0.1" min="0" max="180">
-            </label>
-          </div>
-          <div class="output" id="D_out">D = … м</div>
-        </div>
+  <section id="gear">
+    <h2>3) Оборудование и инфраструктура</h2>
+    <h3>Приборы</h3>
+    <p>Типовой парк: подвижные головы (Wash/Spot/Profile/Beam/Hybrid), стробоскопы, блайндеры, пиксельные линейки/панели, профили/PC/Fresnel, архитектурные LED. Для точных характеристик и режимов канальности всегда используйте официальные мануалы:</p>
+    <ul>
+      <li><a href="https://www.robe.cz/downloads" target="_blank" rel="noopener">Robe — мануалы/сертификаты</a></li>
+      <li><a href="https://www.claypaky.com/" target="_blank" rel="noopener">Claypaky — документация</a></li>
+      <li><a href="https://www.chauvetprofessional.com/downloads/" target="_blank" rel="noopener">Chauvet Professional — загрузки</a></li>
+    </ul>
 
-        <div class="card ok">
-          <div class="title">Пороговые ориентиры</div>
-          <ul>
-            <li>Лица в зале: 500–1000 лк достаточно в большинстве сценариев.</li>
-            <li>ТВ/видео: стабильный свет и выше уровни, следите за фликером.</li>
-            <li>Светлые фоны «съедают» контраст — компенсируйте мощностью и цветом.</li>
-          </ul>
-        </div>
-      </section>
+    <h3>Консоли и софт</h3>
+    <ul>
+      <li>MA Lighting grandMA3 — обучение: <a href="https://www.malighting.com/training/ma-university/" target="_blank" rel="noopener">MA University</a></li>
+      <li>Avolites Titan — <a href="https://www.avolites.com/academy/" target="_blank" rel="noopener">Avolites Academy</a></li>
+      <li>ChamSys MagicQ — <a href="https://chamsyslighting.com/pages/training" target="_blank" rel="noopener">ChamSys Training</a></li>
+      <li>ETC Eos — <a href="https://training.etcconnect.com/" target="_blank" rel="noopener">ETC Learning Stage</a></li>
+    </ul>
 
-      <!-- Цвет и спектр -->
-      <section class="section" id="color-science">
-        <h2>Цвет и спектр</h2>
-        <div class="grid-2">
-          <div>
-            <h3>Про белый и цвет просто</h3>
-            <ul>
-              <li>RGB — складываем цвет (LED/экраны). CMY — вычитаем (фильтры/колёса).</li>
-              <li>CCT — температура белого: 3200K (тёплый), 5600K (дневной).</li>
-              <li>CRI/TM‑30 — насколько «живые» кожа и предметы (ищите CRI ≥90).</li>
-            </ul>
-            <div class="card">
-              <div class="title">Практика для людей</div>
-              Старайтесь синхронизировать CCT и оттенок (±G) на всех приборах, иначе лица «уедут» в зелень/пурпур.
-            </div>
-            <h3>Готовые рецепты</h3>
-            <ul>
-              <li>Тёплый уют: 3000–3400K + чуть «минус‑зелёный».</li>
-              <li>Нейтрально‑холодный: 5200–6000K, без оттенка.</li>
-              <li>Контровик: на шаг холоднее фронта — контуры читаются лучше.</li>
-            </ul>
-          </div>
-          <figure class="figure">
-            <svg viewBox="0 0 600 220" width="100%" height="180" aria-label="Смешение цветов">
-              <rect x="0" y="0" width="600" height="220" fill="none"/>
-              <circle cx="200" cy="110" r="60" fill="rgba(255,0,0,.35)"/>
-              <circle cx="260" cy="110" r="60" fill="rgba(0,255,0,.35)"/>
-              <circle cx="230" cy="160" r="60" fill="rgba(0,0,255,.35)"/>
-              <text x="160" y="40" font-size="12">RGB аддитивное</text>
-              <rect x="400" y="60" width="30" height="90" fill="#0ff"/>
-              <rect x="440" y="60" width="30" height="90" fill="#ff0"/>
-              <rect x="480" y="60" width="30" height="90" fill="#f0f"/>
-              <text x="390" y="40" font-size="12">CMY субтрактивное</text>
-            </svg>
-            <figcaption>RGB — складываем цвета; CMY — фильтруем. Для человека важна стабильность белого и оттенка.</figcaption>
-          </figure>
-        </div>
+    <h3>Силовая часть</h3>
+    <p>Дистрибуция питания (power distro), релейные и диммерные блоки, селективная защита, маркировка линий, расчёт нагрузок по фазам и сечениям. Требования по электробезопасности — см. раздел 5; ориентируйтесь на официальные документы и инструкции производителей.</p>
 
-        <div class="card warn">
-          <div class="title">Ошибки</div>
-          <ul>
-            <li>Разный белый на фронте и контровике — «прыгает» баланс белого в камеру.</li>
-            <li>Слишком насыщенные цвета на лицах — «пластилин» и провал текстур.</li>
-            <li>Низкая частота ШИМ — мерцание на видео. Ищите «flicker free», ШИМ 10–25 кГц.</li>
-          </ul>
-        </div>
+    <h3>Сети и управление</h3>
+    <ul>
+      <li><strong>DMX512/RDM:</strong> основа управления, до 512 каналов на universe. Обзор DMX: <a href="https://www.enttec.com/what-is-dmx/" target="_blank" rel="noopener">ENTTEC</a>. RDM-ресурсы: <a href="https://www.openlighting.org/rdm/" target="_blank" rel="noopener">Open Lighting</a>.</li>
+      <li><strong>Art‑Net:</strong> DMX-over-IP протокол от Artistic Licence: <a href="https://art-net.org.uk/what-is-art-net/" target="_blank" rel="noopener">art-net.org.uk</a>.</li>
+      <li><strong>sACN (ANSI E1.31):</strong> Streaming ACN от ESTA: <a href="https://tsp.esta.org/tsp/standards/E1-31.html" target="_blank" rel="noopener">E1-31</a>.</li>
+      <li><strong>Сетевое оборудование:</strong> управляемые свитчи, ноды/конвертеры, резервирование, VLAN/IGMP. Обучение по AV-сетям: <a href="https://www.luminex.be/training/" target="_blank" rel="noopener">Luminex Training</a>.</li>
+    </ul>
 
-        <div class="card">
-          <div class="title">Практика: сведение разных моделей приборов</div>
-          Разные бренды и серии LED часто дают разный белый. Делайте «референс» белый на одной модели и подгоняйте остальные по CCT/±G «на глаз» + через монитор камеры.
-        </div>
-      </section>
+    <h3>Беспроводные решения</h3>
+    <p>Используются в зонах труднодоступной проводки и мобильных объектов. Лучшие практики: прямая видимость, анализ эфирного спектра, проводной бэкап, контроль задержек и стабильности.</p>
+    <ul>
+      <li>LumenRadio CRMX: <a href="https://lumenradio.com/technologies/crmx/" target="_blank" rel="noopener">lumenradio.com</a></li>
+      <li>Wireless Solution W‑DMX: <a href="https://wirelessdmx.com/" target="_blank" rel="noopener">wirelessdmx.com</a></li>
+    </ul>
 
-      <!-- Электрика -->
-      <section class="section" id="power-rf">
-        <h2>Сети и распределение</h2>
-        <div class="grid-2">
-          <div>
-            <h3>Базово о силе</h3>
-            <ul>
-              <li>Сети: 230 В (1 фаза) и 400 В (3 фазы), 50 Гц.</li>
-              <li>Разъёмы: CEE 16/32/63 A, Schuko, powerCON/TRUE1, Cam‑Lock (стационары).</li>
-              <li>Баланс фаз: равномерно по L1/L2/L3, контролируйте ток нейтрали.</li>
-            </ul>
-            <div class="card">
-              <div class="title">Просто про формулы</div>
-              P ≈ U×I×cosφ. Отсюда I ≈ P / (U×cosφ). Для 3ф: I ≈ P / (√3×U×cosφ).
-            </div>
-            <h3>Инструменты техника</h3>
-            <ul>
-              <li>Клещи тока, мультиметр, индикатор фазы/напряжения.</li>
-              <li>Маркировка: фазы цветом, линии — по зонам (сцена, зал, декор).</li>
-              <li>Запас: терминаторы, переходы, запасные автоматы/УЗО — по требованию площадки.</li>
-            </ul>
-          </div>
+    <h3>Крепёж и безопасность</h3>
+    <p>Сертифицированные клампы, страховочные тросы по массе прибора, маркировка, IP‑рейтинги по условиям (indoor/outdoor). Обязателен визуальный осмотр и двойная страховка там, где регламентируется площадкой.</p>
+  </section>
 
-          <div class="card" data-calc="iphase">
-            <h3>Калькулятор: ток по фазе (1ф/3ф)</h3>
-            <div class="form-row">
-              <label>Мощность P (кВт)
-                <input type="number" id="p_kw" value="10" step="0.1" min="0">
-              </label>
-              <label>Напряжение U (В)
-                <input type="number" id="u_v" value="230" step="1" min="1">
-              </label>
-              <label>cos φ
-                <input type="number" id="cosphi" value="0.95" step="0.01" min="0.1" max="1">
-              </label>
-              <label>Фазы
-                <select id="phases">
-                  <option value="1">1</option>
-                  <option value="3" selected>3</option>
-                </select>
-              </label>
-            </div>
-            <div class="output" id="i_calc">Ток по фазе: …</div>
-            <small class="muted">I1ф = P/(U·cosφ); I3ф = P/(√3·U·cosφ). P — в ваттах.</small>
-          </div>
-        </div>
+  <section id="protocols">
+    <h2>4) Протоколы и сетевые практики</h2>
 
-        <div class="card" data-calc="vdrop">
-          <h3>Калькулятор: падение напряжения (медь)</h3>
-          <pre><code>ΔU ≈ (k · ρ · L · I) / S
-ρ≈0.018 Ω·мм²/м (Cu, 20°C), L — в одну сторону, S — мм²
-k = 2 (1 фаза), k ≈ √3 (3 фазы, упрощённо)</code></pre>
-          <div class="form-row">
-            <label>Длина L (м, одна сторона)
-              <input type="number" id="vd_L" value="50" step="1" min="0">
-            </label>
-            <label>Ток I (А)
-              <input type="number" id="vd_I" value="16" step="0.1" min="0">
-            </label>
-            <label>Сечение S (мм²)
-              <input type="number" id="vd_S" value="2.5" step="0.5" min="0.5">
-            </label>
-            <label>Фазы
-              <select id="vd_ph">
-                <option value="1">1</option>
-                <option value="3" selected>3</option>
-              </select>
-            </label>
-          </div>
-          <div class="output" id="vd_out">ΔU ≈ … В (… %)</div>
-          <small class="muted">Старайтесь держать падение до 5%. Длинные линии — увеличивайте сечение.</small>
-        </div>
+    <h3>DMX512-A и RDM</h3>
+    <ul>
+      <li><strong>DMX512-A:</strong> до 512 каналов в universe; рекомендуется кабель 110–120 Ω, экранированный, с терминатором на конце линии. Сегментирование линий сплиттерами/нодами. Ссылка: обзор DMX от ENTTEC — <a href="https://www.enttec.com/what-is-dmx/" target="_blank" rel="noopener">enttec.com</a>; стандарт публикуется в программе <a href="https://tsp.esta.org/" target="_blank" rel="noopener">ESTA TSP</a>.</li>
+      <li><strong>RDM (E1.20):</strong> двусторонняя конфигурация/мониторинг устройств поверх DMX. Не все сплиттеры/приборы «дружат» с RDM; при симптомах нестабильности на шоу‑день RDM отключают или выносят в отдельный сегмент. Ресурсы: <a href="https://www.openlighting.org/rdm/" target="_blank" rel="noopener">Open Lighting</a>.</li>
+    </ul>
 
-        <div class="card warn">
-          <div class="title">Ошибки</div>
-          <ul>
-            <li>Неровный баланс фаз → перегрев/срабатывания.</li>
-            <li>Плохие переходники → нагрев/паразитные контакты.</li>
-            <li>Скрутки без клемм — запрещено.</li>
-          </ul>
-        </div>
+    <h3>Art‑Net и sACN</h3>
+    <ul>
+      <li><strong>Art‑Net:</strong> исторически использует широковещание; современные реализации поддерживают уникаст. Важно корректно маппить Net/Sub‑Net/Universe. <a href="https://art-net.org.uk/what-is-art-net/" target="_blank" rel="noopener">Спецификация и обзоры</a>.</li>
+      <li><strong>sACN (E1.31):</strong> мультикаст по умолчанию, поддержка приоритетов источников, эффективный для больших количеств universes. Требует IGMP Snooping/Querier на свитчах и грамотной VLAN‑сегментации. <a href="https://tsp.esta.org/tsp/standards/E1-31.html" target="_blank" rel="noopener">ESTA E1.31</a>.</li>
+      <li><strong>Сетевые best practices:</strong> управляемые свитчи, запись IP-плана, статические IP‑пулы, A/B‑резервирование консолей/нод, документирование соответствий Universe↔Port↔Fixture. Хороший вводный курс — <a href="https://www.luminex.be/training/" target="_blank" rel="noopener">Luminex Training</a>.</li>
+    </ul>
 
-        <div class="card">
-          <div class="title">Практика: маркировка дистрибуции</div>
-          Пишите на фронтах автоматов зоны/номера линий, на кабелях — «куда» и «откуда», на линиях — фазу/ток. Экономит часы на монтаже/авариях.
-        </div>
-      </section>
+    <h3>Таймкод и синхронизация</h3>
+    <p>SMPTE LTC и MTC применяются для синхронизации света с видео/медиа/пиротехникой. Источником таймкода может быть медиасервер или главная консоль. Практикум — на тренингах производителей консолей (MA, ETC, Avolites, ChamSys).</p>
 
-      <!-- Электробезопасность -->
-      <section class="section" id="safety">
-        <h2>Электробезопасность</h2>
-        <ul>
-          <li>Работы в щитах и вводах — только с группой допуска. Не уверены — зовите ответственного электрика.</li>
-          <li>Осмотр: кабели без повреждений, разъёмы сухие, PE присутствует и цел.</li>
-          <li>Включение: ввод → щит → дистрибуция → приборы. Выключение — в обратном порядке.</li>
-          <li>Кабели в проходах — только в трапах/мостах, без «петель» по полу.</li>
-        </ul>
-        <div class="card danger">
-          <div class="title">Запрещено</div>
-          Домашние удлинители, отключение PE, «живая» работа на открытых частях, сырые/битые кабели.
-        </div>
-        <div class="card">
-          <div class="title">Непредвиденное</div>
-          <ul>
-            <li>Удар током — отключите питание, вызовите скорую. Не трогайте пострадавшего руками — используйте сухой непроводящий предмет.</li>
-            <li>Дым/гарь — аварийное отключение, проветривание, осмотр электриком.</li>
-          </ul>
-        </div>
-      </section>
+    <h3>Примеры топологий и патча</h3>
 
-      <!-- IP и погода -->
-      <section class="section" id="ip-rating">
-        <h2>IP‑степени и погодные условия</h2>
-        <p>Маркировка IPXY: X — защита от пыли/предметов, Y — от воды. Это защита, а не «броня»: конденсат и перегрев по‑прежнему враги.</p>
-        <div class="grid-2">
-          <div>
-            <table class="table">
-              <thead><tr><th>IP</th><th>Защита</th></tr></thead>
-              <tbody>
-                <tr><td>IP20</td><td>Только помещения, без влаги.</td></tr>
-                <tr><td>IP44</td><td>Брызги. Осторожно под навесом.</td></tr>
-                <tr><td>IP54</td><td>Пыль + брызги. Улица под защитой.</td></tr>
-                <tr><td>IP65</td><td>Пыль непроницаемо, струи воды.</td></tr>
-                <tr><td>IP66</td><td>Мощные струи. Жёсткие условия.</td></tr>
-                <tr><td>IP67</td><td>Кратковременное погружение, подтопления.</td></tr>
-              </tbody>
-            </table>
-            <div class="card callout">
-              Делайте «капельники» (петля вниз перед вводом), не накрывайте вентиляцию, сушите приборы перед упаковкой.
-            </div>
-          </div>
-          <figure class="figure">
-            <svg viewBox="0 0 600 220" width="100%" height="180" aria-label="Капельник на кабеле">
-              <rect x="0" y="0" width="600" height="220" fill="none"/>
-              <rect x="440" y="80" width="120" height="60" rx="10" fill="#6c63ff" opacity=".12" stroke="currentColor"/>
-              <text x="450" y="75" font-size="12" fill="currentColor">Прибор</text>
-              <path d="M100 110 C 200 60, 300 160, 440 110" stroke="#6c63ff" stroke-width="3" fill="none"/>
-              <circle cx="260" cy="120" r="20" fill="none" stroke="#e67e22" stroke-dasharray="5 4"/>
-              <text x="230" y="150" font-size="12" fill="currentColor">петля-капельник</text>
-              <path d="M260 140 l0 16" stroke="#00a8ff" stroke-width="3"/>
-              <circle cx="260" cy="160" r="4" fill="#00a8ff"/>
-              <text x="40" y="115" font-size="12" fill="currentColor">к щиту</text>
-            </svg>
-            <figcaption>Петля‑капельник уводит воду ниже точки ввода — разъёмы остаются сухими.</figcaption>
-          </figure>
-        </div>
-      </section>
+    <h4>Пример A: клуб на 500 гостей (2 universes, Art‑Net→DMX)</h4>
+    <pre>
+Сеть:
+  Консоль: 2x Art-Net выход (стат. IP 2.x.x.x или 10.100.0.10)
+  Node 1 (10.100.0.101): Art-Net→DMX (Universe 1 → DMX A; Universe 2 → DMX B)
+  Switch: управляемый, IGMP Snooping off (нет мультикаста), VLAN не требуется
 
-      <!-- Приборы -->
-      <section class="section" id="fixtures">
-        <h2>Типы приборов</h2>
-        <div class="grid-2">
-          <div>
-            <h3>Куда что ставить</h3>
-            <ul>
-              <li>PAR/батоны — заливка фона, архитектуры, экономично.</li>
-              <li>Профиль — лица/акценты/гобы, чёткий край.</li>
-              <li>Fresnel/PC — мягкий свет, театральная классика.</li>
-              <li>Головы:
-                <ul>
-                  <li>Beam — узкий «воздух», эффект в дыму.</li>
-                  <li>Spot/Profile — гобы, шторки, «рисунок» света.</li>
-                  <li>Wash — «моет» сцену, цвет, фрост/зум.</li>
-                  <li>Hybrid — универсалы, но компромисс по яркости/углам.</li>
-                </ul>
-              </li>
-              <li>Пиксельные панели/стробы — динамика и мэппинг.</li>
-            </ul>
-            <div class="card callout">
-              <div class="title">Тихая площадка</div>
-              Ищите режимы «low noise»/«studio» у приборов для разговорных форматов и съёмок.
-            </div>
-          </div>
-          <figure class="figure">
-            <svg viewBox="0 0 600 260" width="100%" height="200" aria-label="Диаграммы светораспределения">
-              <rect x="0" y="0" width="600" height="260" fill="none"/>
-              <text x="60" y="30" font-size="12">Beam</text>
-              <path d="M60 50 l160 0 l-80 160 z" fill="#6c63ff" opacity=".3" stroke="#6c63ff"/>
-              <text x="260" y="30" font-size="12">Spot</text>
-              <circle cx="340" cy="130" r="60" fill="#12c2e9" opacity=".25" stroke="#12c2e9"/>
-              <text x="460" y="30" font-size="12">Wash</text>
-              <circle cx="540" cy="130" r="90" fill="#d4af37" opacity=".22" stroke="#d4af37"/>
-            </svg>
-            <figcaption>Узкий луч (Beam), средний (Spot), широкий (Wash) — под разные задачи.</figcaption>
-          </figure>
-        </div>
+Universe 1 (DMX 1):
+  001–120: 8x Wash (Mode 15ch) → адреса 001, 016, 031, ... 106
+  121–200: 4x Spot/Profile (Mode 20ch) → 121, 141, 161, 181
+  201–240: 4x Strobe (Mode 10ch) → 201, 211, 221, 231
 
-        <div class="card">
-          <div class="title">Лампы vs LED</div>
-          <ul>
-            <li>Лампы — ярко и «живой» спектр, но горячо, дорого и требовательно к обслуживанию.</li>
-            <li>LED — экономно и гибко по цвету, меньше расходников, следите за ШИМ/CRI.</li>
-          </ul>
-        </div>
+Universe 2 (DMX 2):
+  001–192: 8x Pixel bars (24ch каждая) → 001, 025, 049, ... 169
+  193–200: Spare
+  201–240: 4x Blinder (2ch) → 201, 203, 205, 207
+    </pre>
 
-        <div class="card">
-          <div class="title">Практика: комплект для малого клуба</div>
-          8×LED PAR (фронт/фон), 4×Beam (эффекты), 2×Wash (общий цвет), 2×батона на задник + хейзер. Простой патч и минимум кабелей — быстрый монтаж.
-        </div>
-      </section>
+    <h4>Пример B: арена 10 000+ (sACN, 12–24 universes, A/B резерв)</h4>
+    <pre>
+IP-план:
+  VLAN 10 (Lighting-A): 10.100.10.0/24
+  VLAN 11 (Lighting-B): 10.100.11.0/24
+  Консоль A: 10.100.10.10 (sACN prio 100), Консоль B: 10.100.11.10 (sACN prio 90)
+  Ноды (двухпортовые): 10.100.10.101..130 (uplink в VLAN 10); зеркальные - в VLAN 11
 
-      <!-- Оптика -->
-      <section class="section" id="optics">
-        <h2>Оптика, зум, гобы</h2>
-        <div class="grid-2">
-          <div>
-            <h3>Что внутри</h3>
-            <ol>
-              <li>Источник (LED/лампа) → коллектор.</li>
-              <li>Ирис/фрост, зум/фокус — формируют пятно.</li>
-              <li>Колёса: CMY/Color, гобы (стат./вращ.), анима.</li>
-              <li>Шторки (framing) — точная «обрезка» света.</li>
-            </ol>
-            <div class="card">
-              <div class="title">Быстрая фокусировка профиля</div>
-              Резко вывести контур гобо → слегка смягчить (если нужно) → проверить равномерность поля и цвет.
-            </div>
-          </div>
-          <figure class="figure">
-            <svg viewBox="0 0 620 220" width="100%" height="180" aria-label="Схема оптической цепи">
-              <rect x="0" y="0" width="620" height="220" fill="none"/>
-              <circle cx="60" cy="110" r="18" fill="#ffcc00" stroke="currentColor"/>
-              <text x="40" y="30" font-size="12">Источник</text>
-              <rect x="110" y="80" width="10" height="60" fill="#999"/>
-              <text x="95" y="60" font-size="12">Ирис</text>
-              <rect x="160" y="70" width="12" height="80" fill="#3aa" />
-              <text x="140" y="60" font-size="12">CMY</text>
-              <rect x="210" y="70" width="12" height="80" fill="#7a3"/>
-              <text x="192" y="60" font-size="12">Gobo</text>
-              <rect x="260" y="70" width="12" height="80" fill="#a37"/>
-              <text x="238" y="60" font-size="12">Анима</text>
-              <line x1="320" y1="60" x2="360" y2="160" stroke="#6c63ff" stroke-width="6"/>
-              <line x1="360" y1="60" x2="320" y2="160" stroke="#6c63ff" stroke-width="6"/>
-              <text x="310" y="40" font-size="12">Зум</text>
-              <line x1="420" y1="60" x2="460" y2="160" stroke="#12c2e9" stroke-width="6"/>
-              <line x1="460" y1="60" x2="420" y2="160" stroke="#12c2e9" stroke-width="6"/>
-              <text x="410" y="40" font-size="12">Фокус</text>
-              <rect x="520" y="60" width="8" height="100" fill="#999"/>
-              <text x="500" y="40" font-size="12">Линза</text>
-            </svg>
-            <figcaption>Типовая оптическая цепочка. Понимая её, проще добиваться «того самого» света.</figcaption>
-          </figure>
-        </div>
+Свитчи:
+  Core (FO uplinks) с IGMP Snooping + Querier на VLAN 10/11
+  Access на фермах: IGMP Snooping on, STP/RSTP on, storm control по умолчанию
 
-        <div class="card">
-          <div class="title">Гобы — кратко</div>
-          <ul>
-            <li>Стальные — тонкие, ч/б, не боятся температуры.</li>
-            <li>Стеклянные — цвет/полутон, требуют бережности.</li>
-            <li>Подбирайте размер под ваш держатель (А/В/фирменный).</li>
-          </ul>
-        </div>
+Mapping universes:
+  sACN 1–8 → Main Truss (Wash/Spot)
+  sACN 9–12 → Side Truss (Beam/Blinder/Strobe)
+  sACN 13–16 → Floor/Side Fills
+  sACN 100–110 → Пиксельные линии и спецэффекты
 
-        <div class="card">
-          <div class="title">Практика: частые проблемы</div>
-          Неравномерное поле → проверьте чистоту/позицию линз и фокус. «Двойной контур» — не там стоит фокус или не совпадает плоскость гобо.
-        </div>
-      </section>
+Резервирование:
+  Консоль B получает LTC/MTC и готова взять master по ручному переключению
+  Ноды настроены на HTP merge из A и B или на приоритет sACN источников
+    </pre>
 
-      <!-- LED -->
-      <section class="section" id="led">
-        <h2>LED и драйверы</h2>
-        <div class="grid-2">
-          <div>
-            <h3>Диммирование</h3>
-            <ul>
-              <li>ШИМ — высокая частота = меньше мерцания на видео.</li>
-              <li>Амплитудное/гибридное — ещё дружелюбнее к камере.</li>
-              <li>Кривые диммирования — подстраивайте под «глаз/камеру».</li>
-            </ul>
-            <div class="card warn">
-              <div class="title">Для съёмки</div>
-              Ищите «flicker free», ШИМ 10–25 кГц. Проверка: слоумо 240 fps — полос нет → хорошо.
-            </div>
-          </div>
-          <figure class="figure">
-            <svg viewBox="0 0 620 220" width="100%" height="180" aria-label="Сигналы диммирования">
-              <rect x="0" y="0" width="620" height="220" fill="none"/>
-              <text x="20" y="30" font-size="12">ШИМ (низкая частота)</text>
-              <polyline points="20,80 60,80 60,120 100,120 100,80 140,80 140,120 180,120 180,80 220,80" stroke="#e53935" fill="none" stroke-width="2"/>
-              <text x="20" y="140" font-size="12">ШИМ (высокая частота)</text>
-              <polyline points="20,180 22,160 24,180 26,160 28,180 30,160 32,180 34,160 36,180 38,160 40,180 220,180" stroke="#6c63ff" fill="none" stroke-width="2"/>
-              <text x="260" y="30" font-size="12">Амплитудное</text>
-              <path d="M260 120 C 300 80, 340 160, 380 120 S 460 120, 500 120" stroke="#12c2e9" fill="none" stroke-width="2"/>
-            </svg>
-            <figcaption>Чем выше частота ШИМ/гибрид, тем меньше шансов увидеть мерцание на камере.</figcaption>
-          </figure>
-        </div>
+    <h4>Пример C: фестивальная сцена (два стейджа, общее ядро сети)</h4>
+    <pre>
+VLAN:
+  VLAN 20 (Stage A), VLAN 21 (Stage B), VLAN 30 (Video), VLAN 40 (Spare/Service)
+  Маршрутизация между VLAN запрещена, кроме NMS/мониторинга
 
-        <div class="card">
-          <div class="title">Питание LED</div>
-          <ul>
-            <li>cosφ влияет на ток из сети — ближе к 1 лучше.</li>
-            <li>Импульсные БП могут «шуметь» — разводите силовые/сигнальные грамотно.</li>
-          </ul>
-        </div>
+sACN:
+  Stage A: Universes 1–16
+  Stage B: Universes 101–116
+  Каждый стейдж имеет собственный IGMP Querier (на access-свитче), Core - общий Querier
 
-        <div class="card">
-          <div class="title">Практика: согласование с телевидением</div>
-          Сведите CCT всех приборов, включите «high PWM», фиксируйте частоты/экспозицию с оператором — избавит от полос/фликера.
-        </div>
-      </section>
+Timecode:
+  LTC из медиасервера Stage A по изолированной аудиолинии; B - локальный генератор
+  Никакого «моста» LTC между A и B; для кросс-синхронизации - отдельный сплиттер LTC
+    </pre>
+  </section>
 
-      <!-- DMX/RDM -->
-      <section class="section" id="dmx">
-        <h2>DMX512‑A и RDM</h2>
-        <p>DMX — «язык» света. Один юниверс — до 512 каналов. RDM добавляет обратную связь по той же линии (адресация, режимы, диагностика).</p>
-        <div class="grid-2">
-          <div>
-            <h3>Подключение грамотно</h3>
-            <ul>
-              <li>Кабель DMX/AES 120 Ω (экранированный) — не микрофонный.</li>
-              <li>«Гирлянда» из прибора в прибор, ответвления — через опто‑сплиттер.</li>
-              <li>Терминатор 120 Ω в конце — особенно важен на длинных линиях.</li>
-            </ul>
-            <h3>Адресация без боли</h3>
-            <ul>
-              <li>Следите за диапазонами каналов — не перекрывайте приборы.</li>
-              <li>RDM ускоряет адресацию и поиск неисправностей.</li>
-            </ul>
-          </div>
-          <figure class="figure">
-            <svg viewBox="0 0 620 220" width="100%" height="180" aria-label="Кадр DMX">
-              <rect x="0" y="0" width="620" height="220" fill="none"/>
-              <text x="20" y="30" font-size="12">Break</text>
-              <rect x="20" y="50" width="60" height="20" fill="#e0e0e0" stroke="currentColor"/>
-              <text x="90" y="30" font-size="12">MAB</text>
-              <rect x="90" y="50" width="40" height="20" fill="#e0e0e0" stroke="currentColor"/>
-              <text x="140" y="30" font-size="12">StartCode</text>
-              <rect x="140" y="50" width="60" height="20" fill="#c8e6c9" stroke="currentColor"/>
-              <text x="210" y="30" font-size="12">Slot 1..n</text>
-              <rect x="210" y="50" width="360" height="20" fill="#bbdefb" stroke="currentColor"/>
-              <text x="20" y="100" font-size="12">512 слотов макс (StartCode=0 — обычные данные)</text>
-            </svg>
-            <figcaption>Главное — не структура кадра, а правильная «физика» линии и адресация.</figcaption>
-          </figure>
-        </div>
+  <section id="safety-ru">
+    <h2>5) Безопасность и правовое поле (РФ)</h2>
+    <p>Работы на высоте, электробезопасность и пожарная безопасность в РФ регламентируются обязательными нормами. Техник по свету обязан иметь соответствующие допуски/удостоверения и соблюдать локальные правила площадки.</p>
 
-        <div class="card ok">
-          <div class="title">Диагностика</div>
-          <ul>
-            <li>Дёргается прибор? Проверьте терминатор, порядок включения, качество кабеля.</li>
-            <li>Смешиваете XLR‑3/XLR‑5 — только правильно распаянными переходниками.</li>
-          </ul>
-        </div>
-      </section>
+    <h3>Работы на высоте</h3>
+    <ul>
+      <li>Обучение и допуск, СИЗ (привязочные системы, каски, страховки), журналы инструктажей.</li>
+      <li>Основной документ: «Правила по охране труда при работе на высоте» (Приказ Минтруда РФ № 782н): <a href="https://www.consultant.ru/document/cons_doc_LAW_379314/" target="_blank" rel="noopener">consultant.ru</a>; общая страница Минтруда по охране труда: <a href="https://mintrud.gov.ru/ministry/programms/ohrana_truda/" target="_blank" rel="noopener">mintrud.gov.ru</a>.</li>
+    </ul>
 
-      <!-- Сеть -->
-      <section class="section" id="network">
-        <h2>Art‑Net и sACN</h2>
-        <div class="grid-2">
-          <div>
-            <h3>Когда IP‑сеть лучше</h3>
-            <ul>
-              <li>Много юниверсов и зон — тянуть сеть проще, чем пучки DMX.</li>
-              <li>Art‑Net — просто и везде; sACN — современно (мульткаст, приоритеты).</li>
-              <li>VLAN под свет, IGMP Snooping для sACN — меньше «шумов» и потерь.</li>
-            </ul>
-            <h3>Мини‑шаблон адресации</h3>
-            <ul>
-              <li>Пульт 2.x.0.10/255.255.0.0, ноды 2.x.0.20.., свитчи 2.x.0.1/2</li>
-              <li>Unicast — мало приёмников; Multicast — много подписчиков.</li>
-              <li>Резерв: второй линк/второй источник с меньшим приоритетом.</li>
-            </ul>
-          </div>
-          <figure class="figure">
-            <svg viewBox="0 0 620 260" width="100%" height="200" aria-label="Схема сети светового пульта">
-              <rect x="0" y="0" width="620" height="260" fill="none"/>
-              <rect x="40" y="40" width="120" height="60" rx="10" fill="#6c63ff" opacity=".15" stroke="currentColor"/>
-              <text x="60" y="75" font-size="12">Консоль</text>
-              <rect x="260" y="40" width="100" height="60" rx="10" fill="#12c2e9" opacity=".15" stroke="currentColor"/>
-              <text x="272" y="75" font-size="12">Свитч</text>
-              <rect x="460" y="20" width="120" height="60" rx="10" fill="#d4af37" opacity=".15" stroke="currentColor"/>
-              <text x="475" y="55" font-size="12">Node A</text>
-              <rect x="460" y="100" width="120" height="60" rx="10" fill="#d4af37" opacity=".15" stroke="currentColor"/>
-              <text x="475" y="135" font-size="12">Node B</text>
-              <rect x="460" y="180" width="120" height="60" rx="10" fill="#d4af37" opacity=".15" stroke="currentColor"/>
-              <text x="475" y="215" font-size="12">Node C</text>
-              <line x1="160" y1="70" x2="260" y2="70" stroke="#6c63ff" stroke-width="3"/>
-              <line x1="360" y1="70" x2="460" y2="50" stroke="#6c63ff" stroke-width="3"/>
-              <line x1="360" y1="70" x2="460" y2="130" stroke="#6c63ff" stroke-width="3"/>
-              <line x1="360" y1="70" x2="460" y2="210" stroke="#6c63ff" stroke-width="3"/>
-              <text x="200" y="90" font-size="12">sACN (MC)</text>
-            </svg>
-            <figcaption>Выделяйте сеть под свет и фиксируйте IP — меньше сюрпризов в шоу.</figcaption>
-          </figure>
-        </div>
-        <div class="card callout">
-          <div class="title">Совет</div>
-          Отключайте «зелёные» функции свитчей (EEE), включайте IGMP Snooping. На съёмке — Unicast и фикс IP.
-        </div>
-      </section>
+    <h3>Электробезопасность</h3>
+    <ul>
+      <li>Группы по электробезопасности, допуск к работам, требования к временным электроустановкам, маркировка и испытания кабельных линий/дистрибуций.</li>
+      <li>Ориентир: «Правила по охране труда при эксплуатации электроустановок» (актуальную редакцию см. в правовых системах; поиск по «Приказ Минтруда 903н» на <a href="https://www.consultant.ru/" target="_blank" rel="noopener">consultant.ru</a>).</li>
+    </ul>
 
-      <!-- Патч -->
-      <section class="section" id="patch">
-        <h2>Патч и адресация</h2>
-        <div class="grid-2">
-          <div>
-            <h3>Как вести патч</h3>
-            <ul>
-              <li>Таблица: номер прибора, тип, режим, юниверс, адрес, физический порт/нода.</li>
-              <li>Группы: по позициям (FR/BK/Left/Right), по типам (Wash/Spot/Beam).</li>
-              <li>Палитры: позиция/цвет/гобо — правите палитру, правится шоу.</li>
-            </ul>
-            <div class="card" data-calc="dmxpack">
-              <h3>Калькулятор адресов DMX</h3>
-              <div class="form-row">
-                <label>Старт. адрес
-                  <input type="number" id="dmx_start" value="1" min="1" max="512">
-                </label>
-                <label>Каналов на прибор
-                  <input type="number" id="dmx_footprint" value="16" min="1" max="512">
-                </label>
-                <label>Количество приборов
-                  <input type="number" id="dmx_count" value="8" min="1" max="512">
-                </label>
-              </div>
-              <div class="output" id="dmx_result">Результат: …</div>
-            </div>
-          </div>
-          <figure class="figure">
-            <svg viewBox="0 0 620 220" width="100%" height="180" aria-label="Диапазоны адресов">
-              <rect x="20" y="60" width="580" height="20" fill="#eee" stroke="currentColor"/>
-              <rect x="20" y="60" width="100" height="20" fill="#bbdefb" stroke="currentColor"/>
-              <rect x="130" y="60" width="100" height="20" fill="#c8e6c9" stroke="currentColor"/>
-              <rect x="240" y="60" width="100" height="20" fill="#ffe0b2" stroke="currentColor"/>
-              <rect x="350" y="60" width="100" height="20" fill="#f8bbd0" stroke="currentColor"/>
-              <rect x="460" y="60" width="100" height="20" fill="#d1c4e9" stroke="currentColor"/>
-              <text x="22" y="55" font-size="12">1</text>
-              <text x="580" y="55" font-size="12">512</text>
-              <text x="35" y="98" font-size="12">Прибор 1</text>
-              <text x="145" y="98" font-size="12">Прибор 2</text>
-              <text x="255" y="98" font-size="12">Прибор 3</text>
-            </svg>
-            <figcaption>Без перекрытия: у каждого прибора свой диапазон каналов.</figcaption>
-          </figure>
-        </div>
+    <h3>Пожарная безопасность</h3>
+    <ul>
+      <li>Свободные эвакуационные пути, огнестойкость материалов, первичные средства пожаротушения, план действий при ЧС.</li>
+      <li>Нормативные документы: раздел «Пожарная безопасность» МЧС РФ: <a href="https://mchs.gov.ru/deyatelnost/pozharnaya-bezopasnost/normativnye-dokumenty/" target="_blank" rel="noopener">mchs.gov.ru</a>.</li>
+    </ul>
 
-        <div class="card ok">
-          <div class="title">Экспорт/импорт</div>
-          Храните патч в CSV/таблице и в шоуфайле. Имена: «FR Wash L1», «BK Beam R3» — понятно и быстро.
-        </div>
-      </section>
+    <h3>Документооборот и ответственность</h3>
+    <ul>
+      <li>Наряды-допуски, ППР, акты скрытых работ по подвесу, схемы электропитания и нагрузок, журналы инструктажей.</li>
+      <li>Согласование с техническим директором площадки, риггинг‑подрядчиком, службой безопасности и пожарной частью.</li>
+    </ul>
+    <p><em>Важно:</em> конкретные формы документов и порядок допуска могут различаться по площадкам и регионам. Всегда уточняйте локальные регламенты.</p>
+  </section>
 
-      <!-- Фермы -->
-      <section class="section" id="truss">
-        <h2>Фермы и нагрузки</h2>
-        <div class="grid-2">
-          <div>
-            <h3>Основы</h3>
-            <ul>
-              <li>Фермы разного профиля/высоты — ориентируйтесь на паспорта производителя.</li>
-              <li>Нагрузки: точечные и равномерные. Центр длинного пролёта — зона риска по прогибу.</li>
-              <li>Всегда сверяйтесь с таблицами нагрузок и коэффициентами запаса.</li>
-            </ul>
-            <div class="card" data-calc="bridle">
-              <h3>Калькулятор бриделя (двухветвевой)</h3>
-              <p>Сила в ветви:</p>
-              <pre><code>Fветви = W · g / (2 · sin(α/2))</code></pre>
-              <div class="form-row">
-                <label>Вес подвеса W (кг)
-                  <input type="number" id="bridle_w" value="500" step="1" min="1">
-                </label>
-                <label>Угол между ветвями α (°)
-                  <input type="number" id="bridle_a" value="60" step="1" min="10" max="170">
-                </label>
-              </div>
-              <div class="output" id="bridle_result">Нагрузка на ветвь: …</div>
-              <small class="muted">Оценочно. Учитывайте массы оснастки и реальные углы.</small>
-            </div>
-          </div>
-          <figure class="figure">
-            <svg viewBox="0 0 620 220" width="100%" height="180" aria-label="Бридель">
-              <rect x="0" y="0" width="620" height="220" fill="none"/>
-              <line x1="80" y1="40" x2="310" y2="130" stroke="#6c63ff" stroke-width="4"/>
-              <line x1="540" y1="40" x2="310" y2="130" stroke="#6c63ff" stroke-width="4"/>
-              <rect x="270" y="130" width="80" height="20" fill="#999"/>
-              <text x="295" y="170" font-size="12">W</text>
-              <path d="M160 60 A 100 100 0 0 1 460 60" stroke="currentColor" fill="none"/>
-              <text x="300" y="50" font-size="12">α</text>
-            </svg>
-            <figcaption>Чем меньше угол, тем больше сила. Держите α ≥ 60°.</figcaption>
-          </figure>
-        </div>
+  <section id="skills-career">
+    <h2>6) Компетенции и карьера</h2>
 
-        <div class="card warn">
-          <div class="title">Опасные ошибки</div>
-          <ul>
-            <li>Навес без таблиц/расчётов — нельзя.</li>
-            <li>Нет вторичных страховок на приборах — нельзя.</li>
-            <li>Не учтён вес кабелей/декора — перегруз в центре пролёта.</li>
-          </ul>
-        </div>
-      </section>
+    <h3>Хард-скиллы</h3>
+    <ul>
+      <li>Чтение райдеров/чертежей, базовые расчёты нагрузок, логистика.</li>
+      <li>Работа с консолями (MA, Avolites, ChamSys, ETC), протоколы DMX/RDM/Art‑Net/sACN, сетевые основы (VLAN, IGMP, приоритеты).</li>
+      <li>Сервис: чистка оптики, замена расходников, базовая диагностика по мануалам производителя (Robe/Claypaky/Chauvet и др.).</li>
+      <li>Документация: патчи, схемы, IP‑планы, отчёты, ведение инвентарных листов и серийных номеров.</li>
+    </ul>
 
-      <!-- Тали -->
-      <section class="section" id="hoists">
-        <h2>Тали и подъём</h2>
-        <ul>
-          <li>D8 — подъём без людей под грузом.</li>
-          <li>D8+ — удержание над людьми (без вторичных), движение — нельзя.</li>
-          <li>C1 — движение над людьми (строгие требования и квалификация).</li>
-        </ul>
-        <div class="card">
-          <div class="title">Перед работой</div>
-          <ul>
-            <li>Осмотр цепи/крюков, маркировка грузоподъёмности, проверка концевиков.</li>
-            <li>Цепной мешок снизу — цепь не путается/не клинит.</li>
-            <li>СИЗ: каски, перчатки, привязи и точки крепления линии жизни.</li>
-          </ul>
-        </div>
-      </section>
+    <h3>Софт-скиллы</h3>
+    <ul>
+      <li>Коммуникация на площадке, координация с риггерами/звук/видео.</li>
+      <li>Стрессоустойчивость и тайм-менеджмент.</li>
+      <li>Технический английский (мануалы, тренинги, коммуникация с иностранными продакшнами).</li>
+    </ul>
 
-      <!-- Такелажная безопасность -->
-      <section class="section" id="rig-safety">
-        <h2>Такелажная безопасность</h2>
-        <div class="card danger">
-          <div class="title">Главное правило</div>
-          Зона под грузом закрыта. Никогда не стойте под грузом. У всех приборов — страховочные тросы.
-        </div>
-        <ul>
-          <li>Сигнал «Стоп!» — общий и для всех. Останавливают всё.</li>
-          <li>Связь: рации/жесты. Один ведущий голос.</li>
-          <li>Крепёж — сертифицированный. Затяжка в меру, без «лома».</li>
-        </ul>
-      </section>
+    <h3>Обучение и сертификации (открытые ресурсы)</h3>
+    <ul>
+      <li><a href="https://www.malighting.com/training/ma-university/" target="_blank" rel="noopener">MA Lighting University</a></li>
+      <li><a href="https://www.avolites.com/academy/" target="_blank" rel="noopener">Avolites Academy</a></li>
+      <li><a href="https://chamsyslighting.com/pages/training" target="_blank" rel="noopener">ChamSys Training</a></li>
+      <li><a href="https://training.etcconnect.com/" target="_blank" rel="noopener">ETC Learning Stage</a></li>
+      <li><a href="https://www.luminex.be/training/" target="_blank" rel="noopener">Luminex Training (AV‑сети)</a></li>
+      <li>Российские центры и медиа: <a href="https://showconsulting.ru/" target="_blank" rel="noopener">ShowConsulting</a>, <a href="https://lightsoundnews.com/ru/" target="_blank" rel="noopener">LightSoundNews</a>, <a href="https://showtech.ru/" target="_blank" rel="noopener">Showtech</a>, «<a href="https://scena-ru.com/" target="_blank" rel="noopener">Сцена</a>».</li>
+    </ul>
 
-      <!-- Планирование -->
-      <section class="section" id="planning">
-        <h2>Планирование</h2>
-        <ul>
-          <li>Чертежи: план/фронт/разрез, точки подвеса, нагрузочный план.</li>
-          <li>Списки: приборы с режимами, кабели/силовые, патч свет/сеть, запас.</li>
-          <li>Согласование: мощность площадки, точки подвеса, время монтажа, ОТ/ТБ.</li>
-          <li>План Б: резервные приборы/ноды, альтернативы при погоде.</li>
-        </ul>
-        <div class="card ok">
-          <div class="title">Файлы и версии</div>
-          Храните схемы/патч/шоуфайлы в облаке + на флешке. Имена с датами/версиями — проще откатиться и восстановить.
-        </div>
-      </section>
+    <h3>Карьера</h3>
+    <p>Типовой путь: техник → бригадир → системный инженер по свету → светооператор/LD → продакшн‑менеджер/PM. Для ориентирования по российскому рынку изучайте портфели и вакансии прокатчиков и продакшн‑студий: <a href="https://blackout.ru/" target="_blank" rel="noopener">Blackout</a>, <a href="https://silasveta.com/" target="_blank" rel="noopener">SILA SVETA</a>, а также открытые вакансии на hh.ru (пример поиска: <a href="https://hh.ru/search/vacancy?text=%D1%81%D0%B2%D0%B5%D1%82%D0%BE%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%20%D0%BA%D0%BE%D0%BD%D1%86%D0%B5%D1%80%D1%82" target="_blank" rel="noopener">светотехник концерт</a>).</p>
+  </section>
 
-      <!-- Монтаж -->
-      <section class="section" id="setup">
-        <h2>Монтаж и пусконаладка</h2>
-        <ol>
-          <li>Разметка: точки ферм, трассы кабелей, зоны опасности.</li>
-          <li>Сборка на полу: клампы, кабель‑менеджмент, страховки — заранее.</li>
-          <li>Подвес: только с допуском. Контроль штифтов/сплинтов.</li>
-          <li>Силовые: фазировка/полярность, наличие PE, маркировка линий.</li>
-          <li>Сигнал: магистрали DMX/сеть, сплиттеры/ноды, терминация, маркировка концов.</li>
-          <li>Адресация: режимы и адреса, RDM‑скан (где можно).</li>
-          <li>Лайн‑чек: питание/сигнал/движение/свет/вентиляторы/шум.</li>
-          <li>Фокус: позиции, выравнивание цветов/уровней, сохранение палитр.</li>
-        </ol>
-        <div class="card">
-          <div class="title">Тайминг монтажа</div>
-          Для малого зала: разметка 30–45 мин, подвес 60–90 мин, разводка 60–90 мин, адресация/фокус 60–90 мин. Добавляйте запас под логистику.
-        </div>
-      </section>
+  <section id="preproduction">
+    <h2>7) Инструменты планирования и препродакшна</h2>
+    <h3>CAD/чертежи и обмен с риггерами</h3>
+    <ul>
+      <li>Vectorworks Spotlight — <a href="https://www.vectorworks.net/spotlight" target="_blank" rel="noopener">vectorworks.net/spotlight</a></li>
+      <li>Wysiwyg (CAST) — <a href="https://cast-soft.com/visualisation/wysiwyg-lighting-design" target="_blank" rel="noopener">cast-soft.com</a></li>
+      <li>Capture — <a href="https://www.capture.se/" target="_blank" rel="noopener">capture.se</a></li>
+      <li>Depence² — <a href="https://www.syncronorm.com/" target="_blank" rel="noopener">syncronorm.com</a></li>
+    </ul>
+    <p>Совет: согласовывайте с риггинг‑инженером нагрузочный план и позиции ферм. Синхронизируйте номерные обозначения приборов/линий между чертежом и патчем.</p>
 
-      <!-- Программирование -->
-      <section class="section" id="programming">
-        <h2>Программирование и шоу</h2>
-        <div class="grid-2">
-          <div>
-            <h3>Логика построения</h3>
-            <ul>
-              <li>Группы → палитры (позиция/цвет/гобо/бим) → Cues → CueLists/секвенсеры.</li>
-              <li>Относительные палитры — правка палитры обновит сцены.</li>
-              <li>Эффекты/фейзеры — задавайте скорость/размах/фазу, чтобы «дышало» в темп.</li>
-            </ul>
-            <div class="card">
-              <span class="badge">HTP</span> — яркость суммируется.
-              <span class="badge">LTP</span> — последние данные по цвету/позиции/гобо имеют приоритет.
-            </div>
-            <h3>Busking (импровизация)</h3>
-            <ul>
-              <li>Страницы фейдеров/экшенов: цветовые банки, строб, позиционные кьюты.</li>
-              <li>Кнопки «пожарного» (чёрный/белый/соло) — всегда под пальцем.</li>
-              <li>Темп/тайм — фиксируйте/тапайте в live, держите общую динамику.</li>
-            </ul>
-          </div>
-          <figure class="figure">
-            <svg viewBox="0 0 620 220" width="100%" height="180" aria-label="Поток программирования">
-              <rect x="0" y="0" width="620" height="220" fill="none"/>
-              <rect x="30" y="40" width="110" height="42" rx="10" fill="#bbdefb" stroke="currentColor"/><text x="52" y="66">Группы</text>
-              <rect x="170" y="40" width="120" height="42" rx="10" fill="#c8e6c9" stroke="currentColor"/><text x="188" y="66">Палитры</text>
-              <rect x="320" y="40" width="110" height="42" rx="10" fill="#ffe0b2" stroke="currentColor"/><text x="352" y="66">Cues</text>
-              <rect x="460" y="40" width="140" height="42" rx="10" fill="#f8bbd0" stroke="currentColor"/><text x="475" y="66">Cue Lists</text>
-              <line x1="140" y1="61" x2="170" y2="61" stroke="currentColor"/>
-              <line x1="290" y1="61" x2="320" y2="61" stroke="currentColor"/>
-              <line x1="430" y1="61" x2="460" y2="61" stroke="currentColor"/>
-            </svg>
-            <figcaption>Собирайте шоу из «кубиков» — правки и обновления легче.</figcaption>
-          </figure>
-        </div>
-      </section>
+    <h3>Визуализаторы и программирование</h3>
+    <p>Визуализаторы окупаются при сложных шоу и сжатых сроках на площадке. Поддерживают онлайновую связку с консолью и экспорт отчётов (позиции, фокусы, адреса).</p>
 
-      <!-- Эксплуатация -->
-      <section class="section" id="operation">
-        <h2>Эксплуатация и резерв</h2>
-        <ul>
-          <li>До шоу: RDM‑ошибки/температуры, пинги узлов, резерв питания и сигнала.</li>
-          <li>Во время: мониторинг узлов/температур, журнал событий, быстрый доступ к «пожарным» кнопкам.</li>
-          <li>После: аккуратный демонтаж, проверка кабелей/кейсы, обновление учёта.</li>
-        </ul>
-        <div class="card ok">
-          <div class="title">Резерв</div>
-          <ul>
-            <li>Запасные ноды/сплиттеры/терминаторы.</li>
-            <li>Дублирующий пульт или сессия, UPS на критичных узлах.</li>
-            <li>План быстрой замены приборов (слаки кабелей, запасной кламп/safety).</li>
-          </ul>
-        </div>
-      </section>
+    <h3>Инвентаризация/склад</h3>
+    <p>Штрихкодирование/QR, учёт серийных номеров, наработки, сервисных интервалов и версий прошивок. Важна обратная связь со склада по выявленным дефектам с площадки.</p>
+  </section>
 
-      <!-- ТО -->
-      <section class="section" id="maintenance">
-        <h2>ТО и хранение</h2>
-        <ul>
-          <li>Чистка: фильтры/решётки/линзы — мягкие салфетки, изопропанол/родные средства.</li>
-          <li>Механика: ремни/редукторы — по регламенту производителя.</li>
-          <li>Электрика: коннекторы/кабели, целостность PE, журнал дефектов.</li>
-          <li>Прошивки: одинаковые версии — меньше сюрпризов.</li>
-          <li>Хранение: сухо, без резких перепадов, кейсы — не на сыром полу.</li>
-        </ul>
-        <div class="card warn">
-          <div class="title">Типовые проблемы</div>
-          Пыль+дым = перегрев. Неровное питание = перезагрузки. Помогают чистка, контроль вентиляторов и проверка сети/силы.
-        </div>
-      </section>
+  <section id="ru-cases">
+    <h2>8) Российская практика и кейсы</h2>
 
-      <!-- Калькуляторы -->
-      <section class="section" id="calc">
-        <h2>Калькуляторы</h2>
-        <div class="grid-2">
-          <div class="card" data-calc="ilux">
-            <h3>Освещённость из силы света</h3>
-            <div class="form-row">
-              <label>Сила света I (кд)
-                <input type="number" id="i_cd_calc" value="50000" step="100">
-              </label>
-              <label>Дистанция d (м)
-                <input type="number" id="d_m_calc" value="10" step="0.1">
-              </label>
-            </div>
-            <div class="output" id="e_lux_calc">E = … лк</div>
-          </div>
+    <h3>Кейс 1: типовой «аренный» сетап (по материалам портфелей российских прокатчиков)</h3>
+    <p>Крупные российские прокатные компании в аренных проектах применяют модульный подход: главный каркас (Main Truss), боковые фермы (Side Truss), задник (Back Truss), напольные стойки, отдельные линии спецэффектов и пиксельных приборов. В сетевой части преобладает sACN с IGMP Snooping, разделение на VLAN и A/B‑резервирование консолей.</p>
+    <ul>
+      <li>Пример портфолио и подходов: <a href="https://blackout.ru/" target="_blank" rel="noopener">Blackout</a> (продакшн/прокат), <a href="https://silasveta.com/" target="_blank" rel="noopener">SILA SVETA</a> (световые/мультимедийные шоу).</li>
+      <li>Оборудование: подвижные головы Wash/Spot/Profile/Beam (IP65 где требуется), мощные стробоскопы, блайндеры, пиксельные линейки и медиа‑экраны.</li>
+      <li>Сеть: sACN 12–24+ universes, VLAN для света и медиа раздельно, IGMP Querier на ядре, резервные свитчи на фермах.</li>
+      <li>Силовая часть: распределённые дистрибуции, отдельные линии для моторных лебёдок/подвеса (в зоне ригинга).</li>
+    </ul>
 
-          <div class="card" data-calc="diameter">
-            <h3>Диаметр пятна</h3>
-            <div class="form-row">
-              <label>Расстояние d (м)
-                <input type="number" id="d2_m_calc" value="15" step="0.1">
-              </label>
-              <label>Угол θ (°)
-                <input type="number" id="theta2_calc" value="12" step="0.1">
-              </label>
-            </div>
-            <div class="output" id="D_out_calc">D = … м</div>
-          </div>
+    <h3>Кейс 2: региональный прокат — смешанный парк и смешанные роли</h3>
+    <p>Во многих региональных компаниях техник совмещает функции сетевика и диммер‑техника: приходится увязывать приборы разных поколений и производителей, комбинируя DMX по меди с Art‑Net/sACN на нодах. Типичные меры:</p>
+    <ul>
+      <li>Разбиение по сегментам: «медный» DMX для базовых приборов и отдельные ноды для пиксельных линий.</li>
+      <li>Документирование адресации и IP‑планов, пометка «проблемных» приборов (только ручная адресация, RDM off).</li>
+      <li>Использование тестеров DMX/RDM, контроль целостности кабелей и разъёмов, наличие запасных сплиттеров.</li>
+    </ul>
 
-          <div class="card" data-calc="balance">
-            <h3>Баланс фаз</h3>
-            <div class="form-row">
-              <label>L1 (А)
-                <input type="number" id="l1" value="40" step="0.1">
-              </label>
-              <label>L2 (А)
-                <input type="number" id="l2" value="30" step="0.1">
-              </label>
-              <label>L3 (А)
-                <input type="number" id="l3" value="55" step="0.1">
-              </label>
-            </div>
-            <div class="output" id="balance_out">Δmax = … А (рекомендуется перераспределить … А)</div>
-          </div>
+    <h3>Кейс 3: фестивальная сцена — быстрое переключение и таймкод</h3>
+    <p>На фестивалях с несколькими сценами и tight‑слотами по саундчеку — критичны стандартизированные патчи и сетевые профили. Часто у операторов‑гостей есть свои шоу‑файлы: на сцене держат «домашний» шоу‑профиль и набор патч‑карт для быстрой адаптации, а также конвертеры шоу‑файлов и библиотек приборов.</p>
 
-          <div class="card" data-calc="vdrop">
-            <h3>Падение напряжения (Cu)</h3>
-            <div class="form-row">
-              <label>Длина L (м)
-                <input type="number" id="vd_L_calc" value="50" step="1">
-              </label>
-              <label>Ток I (А)
-                <input type="number" id="vd_I_calc" value="16" step="0.1">
-              </label>
-              <label>Сечение S (мм²)
-                <input type="number" id="vd_S_calc" value="2.5" step="0.5">
-              </label>
-              <label>Фазы
-                <select id="vd_ph_calc">
-                  <option value="1">1</option>
-                  <option value="3" selected>3</option>
-                </select>
-              </label>
-            </div>
-            <div class="output" id="vd_out_calc">ΔU ≈ … В (… %)</div>
-          </div>
+    <h3>Источники и российские отраслевые медиа</h3>
+    <p>Для углубления в практические кейсы и обзоры оборудования полезны русскоязычные ресурсы: <a href="https://lightsoundnews.com/ru/" target="_blank" rel="noopener">LightSoundNews</a>, <a href="https://showtech.ru/" target="_blank" rel="noopener">Showtech</a>, «<a href="https://scena-ru.com/" target="_blank" rel="noopener">Сцена</a>», обучающие материалы <a href="https://showconsulting.ru/" target="_blank" rel="noopener">ShowConsulting</a>. Международный срез и тренды — на <a href="https://prolight-sound.com/" target="_blank" rel="noopener">Prolight + Sound</a>.</p>
+    <p><em>Примечание:</em> конкретные спецификации проектов варьируются от задачи; используйте официальные публикации компаний/организаторов при цитировании.</p>
+  </section>
 
-          <div class="card" data-calc="dmxlist">
-            <h3>Адреса DMX (быстрая раскладка)</h3>
-            <div class="form-row">
-              <label>Шаг канальности
-                <input type="number" id="dmx_step" value="24" min="1">
-              </label>
-              <label>Смещение между приборами
-                <input type="number" id="dmx_gap" value="0" min="0">
-              </label>
-              <label>Сколько адресов показать
-                <input type="number" id="dmx_show" value="10" min="1">
-              </label>
-            </div>
-            <div class="output" id="dmx_list">1, 25, 49…</div>
-          </div>
-        </div>
-      </section>
+  <section id="intl-context">
+    <h2>9) Международный контекст</h2>
+    <h3>Стандарты и подходы</h3>
+    <ul>
+      <li><a href="https://tsp.esta.org/" target="_blank" rel="noopener">ESTA Technical Standards Program</a>: sACN (E1.31), RDM (E1.20), RDMnet (E1.33), и др.</li>
+      <li>Сетевые практики: мультикаст sACN, строгая сегментация VLAN, IGMP Snooping/Querier, резервирование линков (RSTP) или физическое A/B‑ядро.</li>
+      <li>Компании‑референсы: <a href="https://www.prg.com/" target="_blank" rel="noopener">PRG</a>, <a href="https://solotech.com/" target="_blank" rel="noopener">Solotech</a>, <a href="https://negearth.co.uk/" target="_blank" rel="noopener">Neg Earth</a>.</li>
+    </ul>
 
-      <!-- Тесты -->
-      <section class="section" id="quizzes">
-        <h2>Тесты и тренажёры</h2>
-        <div class="quiz" id="quiz1">
-          <div class="q" data-answer="b">
-            <h4>1) Какое волновое сопротивление кабеля предписано DMX512‑A?</h4>
-            <label><input type="radio" name="q1" value="a"> 75 Ω</label>
-            <label><input type="radio" name="q1" value="b"> 120 Ω</label>
-            <label><input type="radio" name="q1" value="c"> 50 Ω</label>
-          </div>
-          <div class="q" data-answer="c">
-            <h4>2) Что произойдет с E при удвоении расстояния d?</h4>
-            <label><input type="radio" name="q2" value="a"> Упадёт в 2 раза</label>
-            <label><input type="radio" name="q2" value="b"> Не изменится</label>
-            <label><input type="radio" name="q2" value="c"> Упадёт в 4 раза</label>
-          </div>
-          <div class="q" data-answer="a">
-            <h4>3) Зачем нужен терминатор DMX?</h4>
-            <label><input type="radio" name="q3" value="a"> Согласовать линию и убрать отражения</label>
-            <label><input type="radio" name="q3" value="b"> Усилить сигнал</label>
-            <label><input type="radio" name="q3" value="c"> Перевести DMX в RDM</label>
-          </div>
-          <div class="q" data-answer="b">
-            <h4>4) Что такое CRI?</h4>
-            <label><input type="radio" name="q4" value="a"> Цветовая температура</label>
-            <label><input type="radio" name="q4" value="b"> Индекс цветопередачи</label>
-            <label><input type="radio" name="q4" value="c"> Коэффициент мерцания</label>
-          </div>
-          <div class="q" data-answer="c">
-            <h4>5) Какая частота ШИМ подходит для съёмки 240 fps?</h4>
-            <label><input type="radio" name="q5" value="a"> 500 Гц</label>
-            <label><input type="radio" name="q5" value="b"> 2 кГц</label>
-            <label><input type="radio" name="q5" value="c"> 10–25 кГц</label>
-          </div>
-          <button class="btn primary" id="quizCheck">Проверить</button>
-          <div class="result" id="quizResult"></div>
-        </div>
-      </section>
+    <h3>Тренды</h3>
+    <ul>
+      <li>IP65 как «новый стандарт» для outdoor‑ивентов.</li>
+      <li>LED‑источники с высоким CRI/TM‑30 в ключевых приборах.</li>
+      <li>Телеметрия/мониторинг парка (RDM/RDMnet), удалённая поддержка, предиктивный сервис.</li>
+      <li>«Зелёная» логистика и энергоэффективность (расписание питания, оптимизация нагрузки).</li>
+    </ul>
+  </section>
 
-      <!-- Источники -->
-      <section class="section" id="refs">
-        <h2>Нормативы и источники</h2>
-        <ul>
-          <li>А. Мельник. Театрально‑концертное постановочное освещение. Основы постановочного видео — lightsoundnews.ru</li>
-          <li>ANSI E1.11 DMX512‑A; ANSI E1.20 RDM; ANSI E1.31 sACN — ESTA/PLASA</li>
-          <li>IEC 60364 / ГОСТ Р 50571 — электроустановки зданий (общие требования)</li>
-          <li>ПУЭ, ПТЭЭП, Правила охраны труда при работе на высоте</li>
-          <li>Паспорта и руководства производителей (фермы, лебёдки, приборы) — нагрузки и допуски</li>
-        </ul>
-        <div class="card">
-          Материалы — учебные. Не заменяют проектные расчёты и официальные инструкции по безопасности. Всегда сверяйтесь с документацией оборудования и требованиями площадки.
-        </div>
-      </section>
+  <section id="trends-bp">
+    <h2>10) Тренды и best practices</h2>
 
-      <!-- Глоссарий (расширенный) -->
-      <section class="section" id="glossary">
-        <h2>Глоссарий</h2>
-        <div id="glossaryList"></div>
-      </section>
+    <h3>Типовые ошибки новичков</h3>
+    <ul>
+      <li>Нет актуального патч-листа и IP‑плана «на бумаге» и в PDF.</li>
+      <li>Отсутствует IGMP Snooping/Querier при использовании sACN → лаги и фризы.</li>
+      <li>Использование микрофонного кабеля вместо DMX 110–120 Ω.</li>
+      <li>Отсутствие терминаторов на концах DMX‑линий.</li>
+      <li>Игнорирование допусков по работам на высоте и электробезопасности.</li>
+      <li>Нет резервирования: консоли, ноды, свитчи, файлы шоу.</li>
+    </ul>
 
-      <!-- Чек-листы -->
-      <section class="section" id="checklists">
-        <h2>Чек‑листы</h2>
-        <div class="grid-2">
-          <div class="card">
-            <h3>Pre‑show (свет)</h3>
-            <ul class="checklist" data-key="pre_show">
-              <li><label><input type="checkbox"> Силовое разложено, фазы сбалансированы</label></li>
-              <li><label><input type="checkbox"> Терминация DMX, сеть Art‑Net/sACN проверена</label></li>
-              <li><label><input type="checkbox"> Приборы онлайн, без ошибок/перегревов</label></li>
-              <li><label><input type="checkbox"> Позиции/цвет/уровни выровнены</label></li>
-              <li><label><input type="checkbox"> Резерв готов: ноды/кабели/терминаторы</label></li>
-            </ul>
-          </div>
-          <div class="card">
-            <h3>Такелаж/безопасность</h3>
-            <ul class="checklist" data-key="rig_safety">
-              <li><label><input type="checkbox"> Таблицы нагрузок у такелажника</label></li>
-              <li><label><input type="checkbox"> Вторичные страховки на каждом приборе</label></li>
-              <li><label><input type="checkbox"> Зоны под грузом ограждены</label></li>
-              <li><label><input type="checkbox"> СИЗ выданы и применяются</label></li>
-            </ul>
-          </div>
-        </div>
-        <button class="btn" id="clearChecklists">Очистить отметки</button>
-      </section>
-    </article>
-  </main>
+    <h3>Практические блоки «Как сделать»</h3>
+    <ul>
+      <li><strong>Быстрая адресация:</strong> по возможности — RDM c консоли/ноды; для «капризных» приборов — ручная адресация и наклейки с адресом/режимом.</li>
+      <li><strong>Стабильная сеть:</strong> включайте IGMP Snooping/Querier, разделяйте свет/видео по VLAN, используйте статические IP‑пулы.</li>
+      <li><strong>Беспровод:</strong> только при прямой видимости, по спецификациям производителя (CRMX/W‑DMX), держите проводной бэкап.</li>
+      <li><strong>Документация:</strong> храните шоу‑файлы, патчи и схемы в облаке и офлайн; используйте единые шаблоны именования.</li>
+    </ul>
+  </section>
+
+  <section id="checklists">
+    <h2>Обязательные чек-листы</h2>
+
+    <h3>Чек-лист «Перед отгрузкой со склада»</h3>
+    <ul>
+      <li>Прошивки и профили приборов обновлены по мануалам производителей (Robe/Claypaky/Chauvet и др.).</li>
+      <li>Функциональный тест: питание, DMX/RDM, Art‑Net/sACN (если применимо).</li>
+      <li>Комплектность: клампы, страховки, safety‑тросы, кабели питания и DMX/EtherCON, запасные предохранители/расходники.</li>
+      <li>Маркировка кейсов/приборов; список серийных номеров; отметки IP‑рейтинга.</li>
+      <li>Силовые схемы и расчёт нагрузок; проверка номиналов автоматов/УЗО.</li>
+      <li>Патч DMX, сетевой план (IP, VLAN, universes), таблица соответствий Universe↔Port↔Fixture.</li>
+      <li>Инструменты: мультиметр, тестер DMX/RDM, тестер кабелей, crimp‑инструмент.</li>
+      <li>Документы: ППР/наряд‑допуск (если требуется), журналы инструктажей, контакты ответственных.</li>
+    </ul>
+
+    <h3>Чек-лист «Перед подачей питания»</h3>
+    <ul>
+      <li>Осмотр подвеса: клампы и страховки, отсутствие перекрутов/пережатий.</li>
+      <li>Проверка дистрибуции, заземления, фазировки, номиналов автоматов.</li>
+      <li>Обрыв петель L2; включены IGMP Snooping/Querier для sACN; VLAN корректны.</li>
+      <li>Проверка адресации и режимов приборов; актуальность патча.</li>
+      <li>Терминаторы на концах DMX‑линий.</li>
+      <li>RDM выключен на «капризных» сегментах или включён там, где нужен мониторинг.</li>
+      <li>Готовность бэкап‑консоли/сцены, резервных нод.</li>
+    </ul>
+
+    <h3>Чек-лист «Перед открытием дверей»</h3>
+    <ul>
+      <li>Pre‑show прогон: тест сцен/пресетов, проверка таймкода.</li>
+      <li>Проверка уровней диммеров/реле, отсутствие «неправильных» включений.</li>
+      <li>Безопасность: закрыты крышки дистрибуций, кабельные трассы защищены, пути эвакуации свободны.</li>
+      <li>План действий при отказе: кто за что отвечает, контакты.</li>
+      <li>Распечатанные схемы/патчи у пульта и в кейсе; копия в облаке.</li>
+    </ul>
+  </section>
+
+  <section id="diagnostics">
+    <h2>Мини-гид по диагностике DMX/RDM/Art‑Net/sACN</h2>
+
+    <h3>Алгоритм общих действий</h3>
+    <ol>
+      <li>Изолируйте проблему: один источник сигнала за раз, простая тест‑сцена.</li>
+      <li>Проверяйте питание и физику (кабели/разъёмы/терминация) перед логикой и ПО.</li>
+      <li>Проверяйте адрес/режим прибора и совместимость профиля в консоли.</li>
+      <li>Локализуйте сегмент обменом элементов «по одному» (кабель, сплиттер, нода, свитч).</li>
+      <li>Фиксируйте изменения и результат (фото/заметки).</li>
+    </ol>
+
+    <h3>DMX</h3>
+    <ul>
+      <li>Приборы не откликаются: проверьте адрес/режим, целостность кабеля, наличие терминатора, исключите RDM. Обзор: <a href="https://www.enttec.com/what-is-dmx/" target="_blank" rel="noopener">ENTTEC — What is DMX</a>.</li>
+      <li>Случайные вспышки: замените подозрительный кабель/сплиттер, проверьте экранирование, избегайте «микрофонных» кабелей.</li>
+    </ul>
+
+    <h3>RDM</h3>
+    <ul>
+      <li>Задержки/«залипания»: отключите RDM на шоу‑день или вынесите в отдельный сегмент; обновите прошивки приборов. Ресурсы: <a href="https://www.openlighting.org/rdm/" target="_blank" rel="noopener">Open Lighting RDM</a>.</li>
+    </ul>
+
+    <h3>Art‑Net</h3>
+    <ul>
+      <li>Потери/задержки: уменьшите broadcast, переведите в unicast, проверьте mapping Net/Sub‑Net/Universe. <a href="https://art-net.org.uk/what-is-art-net/" target="_blank" rel="noopener">art-net.org.uk</a>.</li>
+    </ul>
+
+    <h3>sACN</h3>
+    <ul>
+      <li>Фризы при больших universes: включите IGMP Snooping/Querier, разделите VLAN, проверьте приоритеты источников и merge‑режимы. Стандарт: <a href="https://tsp.esta.org/tsp/standards/E1-31.html" target="_blank" rel="noopener">E1.31</a>.</li>
+    </ul>
+
+    <h3>Timecode</h3>
+    <ul>
+      <li>«Плавает» LTC: проверьте уровень/экранирование аудиолинии, правильный FPS, единый мастер времени, отсутствие «петель» земли.</li>
+    </ul>
+  </section>
+
+  <section id="upskill">
+    <h2>Как прокачаться за 3–6 месяцев</h2>
+    <h3>Бесплатные курсы/вебинары</h3>
+    <ul>
+      <li><a href="https://www.malighting.com/training/ma-university/" target="_blank" rel="noopener">MA Lighting University</a></li>
+      <li><a href="https://www.avolites.com/academy/" target="_blank" rel="noopener">Avolites Academy</a></li>
+      <li><a href="https://chamsyslighting.com/pages/training" target="_blank" rel="noopener">ChamSys Training</a></li>
+      <li><a href="https://training.etcconnect.com/" target="_blank" rel="noopener">ETC Learning Stage</a></li>
+      <li><a href="https://www.luminex.be/training/" target="_blank" rel="noopener">Luminex Training</a> (AV‑сети)</li>
+      <li>Стандарты и протоколы: <a href="https://tsp.esta.org/" target="_blank" rel="noopener">ESTA TSP</a>, <a href="https://www.openlighting.org/rdm/" target="_blank" rel="noopener">Open Lighting</a>.</li>
+    </ul>
+
+    <h3>Практика</h3>
+    <ul>
+      <li>Соберите «лабораторию»: консоль/софт‑эмулятор + нода + управляемый свитч. Настройте sACN с IGMP и VLAN.</li>
+      <li>Сделайте 5 разных патч‑кейсов (клуб/арена/фестиваль/театр/корпоратив) и отрепетируйте быстрый перенос на площадке.</li>
+      <li>Прочитайте 10 мануалов на приборы из вашего парка (режимы, ограничения, сервисные интервалы).</li>
+      <li>Отработайте общение с бригадой: короткие брифы, сигналы безопасности, план действий при отказе.</li>
+    </ul>
+
+    <h3>Сообщества</h3>
+    <ul>
+      <li><a href="https://www.controlbooth.com/" target="_blank" rel="noopener">ControlBooth</a></li>
+      <li><a href="https://www.blue-room.org.uk/" target="_blank" rel="noopener">Blue Room Technical Forum</a></li>
+      <li><a href="https://www.reddit.com/r/lightingdesign/" target="_blank" rel="noopener">r/lightingdesign (Reddit)</a></li>
+    </ul>
+
+    <h3>Книги</h3>
+    <ul>
+      <li>Brad Schiller — The Automated Lighting Programmer’s Handbook: <a href="https://www.routledge.com/The-Automated-Lighting-Programmers-Handbook/Schiller/p/book/9780367569394" target="_blank" rel="noopener">routledge.com</a></li>
+      <li>Paul Dexter — Concert Lighting: <a href="https://www.routledge.com/Concert-Lighting-The-Art-and-Business-of-Entertainment-Lighting/Dexter/p/book/9780367482877" target="_blank" rel="noopener">routledge.com</a></li>
+    </ul>
+  </section>
+
+  <section id="glossary">
+    <h2>Глоссарий (RU/EN)</h2>
+    <ul>
+      <li>Advance — предварительное согласование с площадкой.</li>
+      <li>Addressing — адресация DMX.</li>
+      <li>Art‑Net — DMX-over-IP протокол.</li>
+      <li>Busking — живое ручное ведение света.</li>
+      <li>Cue — шаг/сцена в шоу.</li>
+      <li>Dimmer rack — диммерная стойка.</li>
+      <li>Fixture — световой прибор.</li>
+      <li>Fixture library — библиотека приборов в консоли.</li>
+      <li>Focus — фокусировка приборов.</li>
+      <li>HTP/LTP Merge — логика слияния уровней.</li>
+      <li>IGMP Snooping/Querier — контроль мультикаста.</li>
+      <li>IP rating — степень защиты корпуса (IP65 и др.).</li>
+      <li>LTC/MTC — виды таймкода (SMPTE/MIDI).</li>
+      <li>Node — сетевой интерфейс DMX↔Ethernet.</li>
+      <li>Patch — сопоставление каналов/адресов приборам.</li>
+      <li>Personality/Mode — режим канальности прибора.</li>
+      <li>PoE — питание по Ethernet.</li>
+      <li>Power distro — дистрибуция питания.</li>
+      <li>PSU — блок питания.</li>
+      <li>Redundancy — резервирование.</li>
+      <li>Rigging — подвес конструкций/приборов.</li>
+      <li>RDM — удалённая конфигурация (E1.20).</li>
+      <li>RDMnet — сетевой менеджмент/шина (E1.33).</li>
+      <li>sACN — Streaming ACN (E1.31).</li>
+      <li>Safety (wire) — страховочный трос.</li>
+      <li>Spanning Tree (RSTP) — предотвращение L2‑петель.</li>
+      <li>Stage plot — схема сцены.</li>
+      <li>Terminator — оконечный резистор DMX‑линии.</li>
+      <li>Timecode — временной код для синхронизации.</li>
+      <li>Truss — ферма (алюминиевая конструкция).</li>
+      <li>Universe — набор до 512 DMX‑каналов.</li>
+      <li>VLAN — виртуальная локальная сеть.</li>
+      <li>W‑DMX/CRMX — беспроводные DMX‑технологии.</li>
+      <li>Load‑in/Load‑out — монтаж/демонтаж.</li>
+      <li>Handover — сдача системы/шоу.</li>
+      <li>Spare — резерв/запас.</li>
+      <li>NMS — система сетевого мониторинга.</li>
+    </ul>
+  </section>
+
+  <section id="next">
+    <h2>Куда дальше: ссылки и ресурсы</h2>
+    <h3>Российские отраслевые ресурсы</h3>
+    <ul>
+      <li><a href="https://lightsoundnews.com/ru/" target="_blank" rel="noopener">LightSoundNews</a></li>
+      <li><a href="https://showtech.ru/" target="_blank" rel="noopener">Showtech</a></li>
+      <li><a href="https://scena-ru.com/" target="_blank" rel="noopener">Журнал «Сцена»</a></li>
+      <li><a href="https://showconsulting.ru/" target="_blank" rel="noopener">ShowConsulting — обучение</a></li>
+      <li><a href="https://prolight-sound.com/" target="_blank" rel="noopener">Prolight + Sound — выставка</a></li>
+    </ul>
+
+    <h3>Протоколы и стандарты</h3>
+    <ul>
+      <li><a href="https://tsp.esta.org/" target="_blank" rel="noopener">ESTA Technical Standards Program</a></li>
+      <li><a href="https://www.enttec.com/what-is-dmx/" target="_blank" rel="noopener">DMX (обзор) — ENTTEC</a></li>
+      <li><a href="https://www.openlighting.org/rdm/" target="_blank" rel="noopener">RDM — Open Lighting</a></li>
+      <li><a href="https://art-net.org.uk/what-is-art-net/" target="_blank" rel="noopener">Art‑Net — спецификация</a></li>
+      <li><a href="https://tsp.esta.org/tsp/standards/E1-31.html" target="_blank" rel="noopener">sACN (ANSI E1.31)</a></li>
+    </ul>
+
+    <h3>Производители и обучение</h3>
+    <ul>
+      <li><a href="https://www.malighting.com/training/ma-university/" target="_blank" rel="noopener">MA Lighting University</a></li>
+      <li><a href="https://www.avolites.com/academy/" target="_blank" rel="noopener">Avolites Academy</a></li>
+      <li><a href="https://chamsyslighting.com/pages/training" target="_blank" rel="noopener">ChamSys Training</a></li>
+      <li><a href="https://training.etcconnect.com/" target="_blank" rel="noopener">ETC Learning Stage</a></li>
+      <li><a href="https://www.robe.cz/downloads" target="_blank" rel="noopener">Robe — документация</a></li>
+      <li><a href="https://www.claypaky.com/" target="_blank" rel="noopener">Claypaky</a></li>
+      <li><a href="https://www.chauvetprofessional.com/downloads/" target="_blank" rel="noopener">Chauvet Professional — загрузки</a></li>
+    </ul>
+
+    <h3>Сети и беспровод</h3>
+    <ul>
+      <li><a href="https://www.luminex.be/training/" target="_blank" rel="noopener">Luminex — обучение по AV‑сетям</a></li>
+      <li><a href="https://lumenradio.com/technologies/crmx/" target="_blank" rel="noopener">LumenRadio CRMX</a></li>
+      <li><a href="https://wirelessdmx.com/" target="_blank" rel="noopener">Wireless Solution W‑DMX</a></li>
+    </ul>
+
+    <h3>Компании и кейсы</h3>
+    <ul>
+      <li><a href="https://blackout.ru/" target="_blank" rel="noopener">Blackout (RU)</a></li>
+      <li><a href="https://silasveta.com/" target="_blank" rel="noopener">SILA SVETA (RU/EN)</a></li>
+      <li><a href="https://www.prg.com/" target="_blank" rel="noopener">PRG (Intl)</a></li>
+      <li><a href="https://solotech.com/" target="_blank" rel="noopener">Solotech (Intl)</a></li>
+      <li><a href="https://negearth.co.uk/" target="_blank" rel="noopener">Neg Earth (UK)</a></li>
+    </ul>
+
+    <h3>Сообщества</h3>
+    <ul>
+      <li><a href="https://www.controlbooth.com/" target="_blank" rel="noopener">ControlBooth</a></li>
+      <li><a href="https://www.blue-room.org.uk/" target="_blank" rel="noopener">Blue Room Technical Forum</a></li>
+      <li><a href="https://www.reddit.com/r/lightingdesign/" target="_blank" rel="noopener">r/lightingdesign (Reddit)</a></li>
+    </ul>
+
+    <h3>Рынок труда (РФ)</h3>
+    <ul>
+      <li><a href="https://hh.ru/search/vacancy?text=%D1%81%D0%B2%D0%B5%D1%82%D0%BE%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%20%D0%BA%D0%BE%D0%BD%D1%86%D0%B5%D1%80%D1%82" target="_blank" rel="noopener">Поиск вакансий на hh.ru</a></li>
+    </ul>
+
+    <h3>Нотабене</h3>
+    <p>При цитировании стандартов и регламентов указывайте дату доступа и актуальную редакцию документа. Для российских норм используйте правовые системы (<a href="https://www.consultant.ru/" target="_blank" rel="noopener">Consultant</a>, ГАРАНТ) и сайты ведомств (<a href="https://mintrud.gov.ru/" target="_blank" rel="noopener">Минтруд</a>, <a href="https://mchs.gov.ru/" target="_blank" rel="noopener">МЧС</a>).</p>
+  </section>
+
+  <section id="printable">
+    <h2>Приложение: чек-лист для печати</h2>
+    <p>Вставьте блок в отдельный документ и экспортируйте в PDF.</p>
+    <pre>
+Свет — контрольный лист (склад/площадка/шоу)
+
+Склад:
+[ ] Прошивки и профили — ок
+[ ] Тест приборов (питание/DMX/RDM/Art‑Net/sACN) — ок
+[ ] Комплектность, маркировка, серийные номера — ок
+[ ] Силовые схемы, расчёт нагрузок — ок
+[ ] Патч/сетевой план/таблицы — ок
+[ ] Инструменты и тестеры — ок
+[ ] Документы/контакты — ок
+
+Площадка (до питания):
+[ ] Крепёж/страховки — ок
+[ ] Дистрибуция/заземление/номиналы — ок
+[ ] Сеть: IGMP/VLAN/петли — ок
+[ ] Адреса/режимы/терминаторы — ок
+[ ] RDM — по плану
+[ ] Резерв: консоль/ноды — ок
+
+Перед открытием:
+[ ] Pre‑show прогон/таймкод — ок
+[ ] Диммеры/реле — ок
+[ ] Безопасность/трассы/крышки — ок
+[ ] План отказов/контакты — ок
+[ ] Документация у пульта/в облаке — ок
+    </pre>
+  </section>
 
   <footer>
-    © 2025 Рыбальченко Алексей • Пособие для техников по свету прокатных компаний.
+    <p><small>Материал подготовлен для обзорных целей. Технические операции проводите в соответствии с актуальными нормативами РФ и стандартами индустрии, руководствуясь официальными мануалами производителей и локальными регламентами площадок.</small></p>
   </footer>
-</div>
-
-<!-- Всплывающиеся окна и поиск -->
-<div id="popover" class="popover hidden" role="dialog" aria-hidden="true"></div>
-<div id="tooltip" class="tooltip hidden" role="tooltip" aria-hidden="true"></div>
-<div id="searchResults" class="article hidden" style="margin:16px auto; padding:16px; max-width:min(var(--content-max), calc(100vw - 32px));"></div>
-
-<script>
-(function(){
-  const root = document.documentElement;
-  const sidebar = document.getElementById('sidebar');
-  const menuToggle = document.getElementById('menuToggle');
-  const themeToggle = document.getElementById('themeToggle');
-  const expandAllBtn = document.getElementById('expandAll');
-  const searchInput = document.getElementById('search');
-  const searchResults = document.getElementById('searchResults');
-  const popover = document.getElementById('popover');
-  const tooltip = document.getElementById('tooltip');
-  const showAllBtn = document.getElementById('showAllSections');
-
-  // Тема
-  const savedTheme = localStorage.getItem('theme');
-  if(savedTheme){ root.setAttribute('data-theme', savedTheme); }
-  themeToggle.addEventListener('click', ()=>{
-    const cur = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-    root.setAttribute('data-theme', cur);
-    localStorage.setItem('theme', cur);
-  });
-
-  // Меню (моб.)
-  menuToggle.addEventListener('click', ()=> sidebar.classList.toggle('open'));
-
-  // Развернуть/свернуть группы
-  expandAllBtn.addEventListener('click', ()=>{
-    const groups = sidebar.querySelectorAll('.nav-group');
-    const allOpen = Array.from(groups).every(g=>g.open);
-    groups.forEach(g=>g.open = !allOpen);
-    expandAllBtn.textContent = allOpen ? 'Развернуть разделы' : 'Свернуть разделы';
-  });
-
-  // Подсветка активного раздела
-  const sections = document.querySelectorAll('.article .section');
-  const navLinks = document.querySelectorAll('.nav-link');
-  const observer = new IntersectionObserver(entries=>{
-    entries.forEach(entry=>{
-      if(entry.isIntersecting){
-        const id = entry.target.id;
-        navLinks.forEach(a=>a.classList.toggle('active', a.getAttribute('href') === '#'+id));
-        history.replaceState(null, '', '#'+id);
-      }
-    });
-  }, {rootMargin:'-40% 0px -55% 0px', threshold: 0.01});
-  sections.forEach(s=>observer.observe(s));
-
-  // ======= Показывать только выбранный раздел =======
-  function setActiveLink(id){
-    navLinks.forEach(a=>a.classList.toggle('active', a.getAttribute('href') === '#'+id));
-  }
-  function showOnlySection(id){
-    if(!id) return;
-    let found = false;
-    document.querySelectorAll('.article .section').forEach(sec=>{
-      if(sec.id === id){ sec.classList.remove('hidden'); found = true; }
-      else { sec.classList.add('hidden'); }
-    });
-    if(found){
-      if(location.hash !== '#'+id){
-        location.hash = '#'+id;
-      }
-      setActiveLink(id);
-      if(searchResults){ searchResults.classList.add('hidden'); searchResults.innerHTML=''; }
-      sidebar.classList.remove('open');
-      window.scrollTo({top: document.querySelector('.article').offsetTop - 12, behavior: 'smooth'});
-    }
-  }
-
-  // Показать все разделы — кнопка в начале меню
-  if(showAllBtn){
-    showAllBtn.addEventListener('click', ()=>{
-      document.querySelectorAll('.article .section').forEach(sec=> sec.classList.remove('hidden'));
-      if(searchResults){ searchResults.classList.add('hidden'); searchResults.innerHTML=''; }
-      sidebar.classList.remove('open');
-      window.scrollTo({top: document.querySelector('.article').offsetTop - 12, behavior: 'smooth'});
-    });
-  }
-
-  // Плавные якоря + режим "один раздел"
-  document.querySelectorAll('a[href^="#"]').forEach(a=>{
-    a.addEventListener('click', (e)=>{
-      const id = a.getAttribute('href').slice(1);
-      if(!id) return;
-      const target = document.getElementById(id);
-      if(target){
-        e.preventDefault();
-        showOnlySection(id);
-      }
-    });
-  });
-
-  // Переходы по истории/изменению hash (кнопки Назад/Вперёд)
-  window.addEventListener('hashchange', ()=>{
-    const id = location.hash.replace('#','');
-    if(id) showOnlySection(id);
-  });
-
-  // Сноски (popover)
-  function showPopover(el, html){
-    popover.innerHTML = '<div class="title">Сноска</div>'+html;
-    popover.classList.remove('hidden');
-    positionFloating(popover, el);
-  }
-  function hidePopover(){ popover.classList.add('hidden'); }
-  document.addEventListener('click', (e)=>{
-    if(e.target.classList.contains('footnote-ref')){
-      e.stopPropagation();
-      const html = e.target.dataset.footnote || '';
-      showPopover(e.target, html);
-    }else if(!popover.contains(e.target)){
-      hidePopover();
-    }
-  });
-  document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') hidePopover(); });
-
-  // Глоссарий/подсказки
-  const glossary = {
-    dmx: 'DMX512‑A — язык управления светом: пульт отправляет значения каналов приборам (до 512 на юниверс).',
-    rdm: 'RDM — двусторонняя связь по линии DMX: удалённая адресация и диагностика.',
-    sacn: 'sACN (E1.31) — DMX по IP (UDP), умеет мульткаст и приоритеты источников.',
-    artnet: 'Art‑Net — популярный протокол DMX по IP, прост и повсеместно поддержан.',
-    universe: 'Юниверс — набор до 512 DMX‑каналов. В сетях можно иметь тысячи.',
-    cri: 'CRI — индекс цветопередачи. Для лиц — стремитесь к CRI ≥ 90.',
-    tm30: 'TM‑30 — современная метрика цветопередачи (Rf/Rg), информативнее CRI.',
-    cct: 'CCT — температура белого (K): 3200 — тёплый, 5600 — дневной.',
-    pwm: 'PWM — широтно‑импульсная модуляция яркости. Высокая частота — меньше мерцания.',
-    true1: 'TRUE1 — силовой разъём, допускающий коммутацию под нагрузкой (по паспорту).',
-    rj45: 'RJ45 — коннектор витой пары. На сцене — EtherCON для защиты.',
-    termination: 'Терминация — резистор 120 Ω в конце DMX‑цепочки для устранения отражений.',
-    beam: 'Beam — узкий луч (малый угол), «воздух» в дыму.',
-    profile: 'Profile/Spot — прибор с гобо, фреймами и чётким пятном.',
-    wash: 'Wash — широкий мягкий свет, «моет» сцену.',
-    ip: 'IP‑рейтинг — степень защиты корпуса от пыли и воды (IP65 и т.д.).',
-    phase: 'Фаза L1/L2/L3 — проводники трёхфазной сети. Важен баланс.',
-    cosphi: 'cos φ — коэффициент мощности. Влияет на ток из сети.',
-    d8: 'D8/D8+/C1 — классы талей по допускам удержания/движения грузов над людьми.',
-    bridle: 'Бридель — двухветвевой строп для распределения нагрузки на две точки.',
-    shackle: 'Шекл — такелажная скоба (используйте сертифицированный).',
-    safety: 'Safety — страховочный трос прибора. Обязателен.',
-    gobo: 'Gobo — трафарет (стальной/стеклянный) с рисунком света.',
-    frost: 'Frost — рассеивающий фильтр (смягчает край пятна).',
-    iris: 'Ирис — диафрагма, сужает световое пятно.',
-    cto: 'CTO — фильтр/функция «теплит» белый оттенок.',
-    htp: 'HTP — Highest Takes Precedence: побеждает большее значение яркости.',
-    ltp: 'LTP — Latest Takes Precedence: последние данные (цвет/позиция) важнее.',
-    uplight: 'Uplight — подсветка снизу (фон/архитектура).',
-    lux: 'Люкс — освещённость (свет на 1 м²).',
-    lumen: 'Люмен — общий световой поток источника.',
-    candela: 'Кандела — сила света в направлении.',
-    ups: 'UPS — бесперебойник (даёт время корректно сохранить/переключить).',
-    pe: 'PE — защитный проводник (заземление).',
-    rcd: 'УЗО (RCD) — отключает при токе утечки.',
-    distro: 'Дистрибуция — силовой щиток/распределитель линий.',
-    vlan: 'VLAN — выделенная виртуальная сеть в свитче.',
-    igmp: 'IGMP Snooping — «умный» мульткаст для sACN.',
-    haze: 'Хейз (дымка) — тонкая взвесь для визуализации лучей.',
-    strobe: 'Строб — прибор/эффект высокой частоты вспышек.',
-    fixture: 'Fixture — любой осветительный прибор в контексте пульта/патча.',
-    address: 'Адрес — стартовый DMX‑канал прибора.',
-    footprint: 'Footprint — количество DMX‑каналов, занимает прибор.',
-    node: 'Node — сетевое устройство, отдающее/принимающее DMX по IP.',
-    splitter: 'Сплиттер — делитель DMX на несколько изолированных линий.',
-    link: 'Линк — соединение между сетевыми устройствами.',
-    foh: 'FOH — Front of House: пульт/операторская перед залом.',
-    gel: 'Гель — цветной фильтр (театральная плёнка).',
-    haze_density: 'Плотность хейза — тонкая настройка, чтобы лучи были видны, но лица не «молочные».'
-  };
-  const normGloss = {}; Object.keys(glossary).forEach(k=> normGloss[k.replace(/\s+/g,'').toLowerCase()] = glossary[k]);
-
-  // Tooltip/Popover по терминам
-  document.querySelectorAll('.term').forEach(term=>{
-    term.addEventListener('mouseenter', ()=>{
-      const key = (term.dataset.term || '').replace(/\s+/g,'').toLowerCase();
-      const text = normGloss[key];
-      if(text){
-        tooltip.textContent = text;
-        tooltip.classList.remove('hidden');
-        positionFloating(tooltip, term);
-      }
-    });
-    term.addEventListener('mouseleave', ()=> tooltip.classList.add('hidden'));
-    term.addEventListener('click', ()=>{
-      const key = (term.dataset.term || '').replace(/\s+/g,'').toLowerCase();
-      const text = normGloss[key] || 'Определение не найдено.';
-      showPopover(term, `<div>${text}</div>`);
-    });
-  });
-
-  // Позиция всплывашек
-  function positionFloating(el, anchor){
-    const rect = anchor.getBoundingClientRect();
-    const ew = el.offsetWidth, eh = el.offsetHeight;
-    let x = rect.left + rect.width/2 - ew/2;
-    let y = rect.bottom + 10;
-    if(x < 10) x = 10;
-    if(x + ew > window.innerWidth - 10) x = window.innerWidth - ew - 10;
-    if(y + eh > window.innerHeight - 10) y = rect.top - eh - 10;
-    el.style.left = x + window.scrollX + 'px';
-    el.style.top = y + window.scrollY + 'px';
-  }
-
-  // Поиск
-  function doSearch(q){
-    const query = q.trim().toLowerCase();
-    if(!query){ searchResults.classList.add('hidden'); searchResults.innerHTML=''; return; }
-    const hits = [];
-    const secs = document.querySelectorAll('.article .section');
-    secs.forEach(sec=>{
-      const text = sec.innerText.toLowerCase();
-      if(text.includes(query)){
-        const idx = text.indexOf(query);
-        const ctx = sec.innerText.substring(Math.max(0, idx-60), idx+60);
-        hits.push({id: sec.id, title: sec.querySelector('h2')?.innerText || sec.id, ctx});
-      }
-    });
-    searchResults.innerHTML = '<h3>Результаты поиска</h3>' + (hits.length ? '' : '<p>Ничего не найдено.</p>');
-    hits.slice(0,20).forEach(h=>{
-      const div = document.createElement('div');
-      div.className = 'card';
-      div.innerHTML = `<strong><a href="#${h.id}">${h.title}</a></strong><div><small>${escapeHtml(h.ctx).replace(new RegExp(query,'gi'), m=>'<mark>'+m+'</mark>')}</small></div>`;
-      searchResults.appendChild(div);
-    });
-    searchResults.classList.remove('hidden');
-    searchResults.scrollIntoView({behavior:'smooth', block:'start'});
-  }
-  function escapeHtml(s){ return s.replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-  searchInput.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ doSearch(searchInput.value); } });
-
-  // ===== Калькуляторы (авто, без кнопок) =====
-  // Освещенность
-  function updateELux(){
-    const Iel = document.getElementById('i_cd');
-    const del = document.getElementById('d_m');
-    const out = document.getElementById('e_lux');
-    if(!Iel || !del || !out) return;
-    const I = parseFloat(Iel.value||'0');
-    const d = parseFloat(del.value||'0');
-    const E = d>0 ? (I/(d*d)) : 0;
-    out.textContent = 'E = ' + (isFinite(E)? E.toFixed(1):'—') + ' лк';
-  }
-  ['i_cd','d_m'].forEach(id=>{
-    const el = document.getElementById(id);
-    if(el) el.addEventListener('input', updateELux);
-  });
-  updateELux();
-
-  // Диаметр пятна
-  function updateD2(){
-    const dEl = document.getElementById('d2_m');
-    const thEl = document.getElementById('theta2');
-    const out = document.getElementById('D_out');
-    if(!dEl || !thEl || !out) return;
-    const d = parseFloat(dEl.value||'0');
-    const th = parseFloat(thEl.value||'0') * Math.PI/180;
-    const D = 2*d*Math.tan(th/2);
-    out.textContent = 'D = ' + (isFinite(D)? D.toFixed(2):'—') + ' м';
-  }
-  ['d2_m','theta2'].forEach(id=>{
-    const el = document.getElementById(id);
-    if(el) el.addEventListener('input', updateD2);
-  });
-  updateD2();
-
-  // Ток по фазе
-  function updateICalc(){
-    const PkW = parseFloat(document.getElementById('p_kw')?.value||'0');
-    const U = parseFloat(document.getElementById('u_v')?.value||'230');
-    const cosphi = parseFloat(document.getElementById('cosphi')?.value||'1');
-    const ph = parseInt(document.getElementById('phases')?.value||'1',10);
-    const out = document.getElementById('i_calc');
-    if(!out) return;
-    let I = 0;
-    if(ph===1){ I = (PkW*1000)/(U * (cosphi||1)); }
-    else { I = (PkW*1000)/(Math.sqrt(3)*U*(cosphi||1)); }
-    out.textContent = 'Ток по фазе: ' + (isFinite(I)? I.toFixed(1):'—') + ' А';
-  }
-  ['p_kw','u_v','cosphi','phases'].forEach(id=>{
-    const el = document.getElementById(id);
-    if(el) el.addEventListener('input', updateICalc);
-  });
-  updateICalc();
-
-  // Падение напряжения
-  function updateVD(){
-    const L = parseFloat(document.getElementById('vd_L')?.value||'0');
-    const I = parseFloat(document.getElementById('vd_I')?.value||'0');
-    const S = parseFloat(document.getElementById('vd_S')?.value||'1');
-    const ph = parseInt(document.getElementById('vd_ph')?.value||'1',10);
-    const out = document.getElementById('vd_out');
-    if(!out) return;
-    const rho = 0.018;
-    const k = ph===1 ? 2 : Math.sqrt(3);
-    const dU = (k * rho * L * I) / S;
-    const U = ph===1 ? 230 : 400;
-    const pct = (dU/U)*100;
-    out.textContent = 'ΔU ≈ ' + dU.toFixed(2) + ' В (' + pct.toFixed(2) + ' %)';
-  }
-  ['vd_L','vd_I','vd_S','vd_ph'].forEach(id=>{
-    const el = document.getElementById(id);
-    if(el) el.addEventListener('input', updateVD);
-  });
-  updateVD();
-
-  // Баланс фаз
-  function updateBalance(){
-    const a = parseFloat(document.getElementById('l1')?.value||'0');
-    const b = parseFloat(document.getElementById('l2')?.value||'0');
-    const c = parseFloat(document.getElementById('l3')?.value||'0');
-    const max = Math.max(a,b,c);
-    const min = Math.min(a,b,c);
-    const delta = max-min;
-    const out = document.getElementById('balance_out');
-    if(out) out.textContent = 'Δmax = ' + delta.toFixed(1) + ' А (рекомендуется перераспределить ≥ ' + (delta>10? (delta-10).toFixed(1) : '0.0') + ' А)';
-  }
-  ['l1','l2','l3'].forEach(id=>{
-    const el = document.getElementById(id);
-    if(el) el.addEventListener('input', updateBalance);
-  });
-  updateBalance();
-
-  // DMX pack
-  function updateDMXPack(){
-    const start = parseInt(document.getElementById('dmx_start')?.value||'1',10);
-    const fp = parseInt(document.getElementById('dmx_footprint')?.value||'1',10);
-    const count = parseInt(document.getElementById('dmx_count')?.value||'1',10);
-    const out = document.getElementById('dmx_result');
-    if(!out) return;
-    const arr = [];
-    let s = start;
-    for(let i=0; i<count; i++){
-      const end = s + fp - 1;
-      if(end>512){ arr.push(`Прибор ${i+1}: вне диапазона`); break; }
-      arr.push(`Прибор ${i+1}: ${s}–${end}`);
-      s = end + 1;
-    }
-    out.textContent = arr.join(' | ');
-  }
-  ['dmx_start','dmx_footprint','dmx_count'].forEach(id=>{
-    const el = document.getElementById(id);
-    if(el) el.addEventListener('input', updateDMXPack);
-  });
-  updateDMXPack();
-
-  // DMX list
-  function updateDMXList(){
-    const step = parseInt(document.getElementById('dmx_step')?.value||'1',10);
-    const gap = parseInt(document.getElementById('dmx_gap')?.value||'0',10);
-    const show = parseInt(document.getElementById('dmx_show')?.value||'10',10);
-    const out = document.getElementById('dmx_list');
-    if(!out) return;
-    const arr = [];
-    let s = 1;
-    for(let i=0;i<show;i++){
-      if(s>512) break;
-      arr.push(s);
-      s += step + gap;
-    }
-    out.textContent = arr.join(', ');
-  }
-  ['dmx_step','dmx_gap','dmx_show'].forEach(id=>{
-    const el = document.getElementById(id);
-    if(el) el.addEventListener('input', updateDMXList);
-  });
-  updateDMXList();
-
-  // Бридель
-  function updateBridle(){
-    const W = parseFloat(document.getElementById('bridle_w')?.value||'0');
-    const a = parseFloat(document.getElementById('bridle_a')?.value||'60') * Math.PI/180;
-    const g = 9.80665;
-    const F = (W * g) / (2 * Math.sin(a/2));
-    const kN = F / 1000;
-    const out = document.getElementById('bridle_result');
-    if(out) out.textContent = 'Нагрузка на ветвь ≈ ' + kN.toFixed(2) + ' кН (' + (F/9.80665).toFixed(0) + ' кгс)';
-  }
-  ['bridle_w','bridle_a'].forEach(id=>{
-    const el = document.getElementById(id);
-    if(el) el.addEventListener('input', updateBridle);
-  });
-  updateBridle();
-
-  // Дубли калькуляторов в отдельном блоке
-  function updateELuxCalc(){
-    const Iel = document.getElementById('i_cd_calc');
-    const del = document.getElementById('d_m_calc');
-    const out = document.getElementById('e_lux_calc');
-    if(!Iel || !del || !out) return;
-    const I = parseFloat(Iel.value||'0');
-    const d = parseFloat(del.value||'0');
-    const E = d>0 ? (I/(d*d)) : 0;
-    out.textContent = 'E = ' + (isFinite(E)? E.toFixed(1):'—') + ' лк';
-  }
-  ['i_cd_calc','d_m_calc'].forEach(id=>{
-    const el = document.getElementById(id);
-    if(el) el.addEventListener('input', updateELuxCalc);
-  });
-  updateELuxCalc();
-
-  function updateD2Calc(){
-    const dEl = document.getElementById('d2_m_calc');
-    const thEl = document.getElementById('theta2_calc');
-    const out = document.getElementById('D_out_calc');
-    if(!dEl || !thEl || !out) return;
-    const d = parseFloat(dEl.value||'0');
-    const th = parseFloat(thEl.value||'0') * Math.PI/180;
-    const D = 2*d*Math.tan(th/2);
-    out.textContent = 'D = ' + (isFinite(D)? D.toFixed(2):'—') + ' м';
-  }
-  ['d2_m_calc','theta2_calc'].forEach(id=>{
-    const el = document.getElementById(id);
-    if(el) el.addEventListener('input', updateD2Calc);
-  });
-  updateD2Calc();
-
-  function updateVDCalc(){
-    const L = parseFloat(document.getElementById('vd_L_calc')?.value||'0');
-    const I = parseFloat(document.getElementById('vd_I_calc')?.value||'0');
-    const S = parseFloat(document.getElementById('vd_S_calc')?.value||'1');
-    const ph = parseInt(document.getElementById('vd_ph_calc')?.value||'1',10);
-    const out = document.getElementById('vd_out_calc');
-    if(!out) return;
-    const rho = 0.018;
-    const k = ph===1 ? 2 : Math.sqrt(3);
-    const dU = (k * rho * L * I) / S;
-    const U = ph===1 ? 230 : 400;
-    const pct = (dU/U)*100;
-    out.textContent = 'ΔU ≈ ' + dU.toFixed(2) + ' В (' + pct.toFixed(2) + ' %)';
-  }
-  ['vd_L_calc','vd_I_calc','vd_S_calc','vd_ph_calc'].forEach(id=>{
-    const el = document.getElementById(id);
-    if(el) el.addEventListener('input', updateVDCalc);
-  });
-  updateVDCalc();
-
-  // Тест
-  const quizCheck = document.getElementById('quizCheck');
-  if(quizCheck){
-    quizCheck.addEventListener('click', ()=>{
-      const qBlocks = document.querySelectorAll('#quiz1 .q');
-      let correct = 0, total = qBlocks.length;
-      qBlocks.forEach((q, idx)=>{
-        const name = 'q'+(idx+1);
-        const ans = q.dataset.answer;
-        const checked = document.querySelector('input[name="'+name+'"]:checked');
-        q.querySelectorAll('label').forEach(l=> l.style.background='');
-        if(checked){
-          const lab = checked.parentElement;
-          if(checked.value === ans){ correct++; lab.style.background = 'rgba(46, 125, 50, .2)'; }
-          else { lab.style.background = 'rgba(229, 57, 53, .2)'; }
-        }
-      });
-      const res = document.getElementById('quizResult');
-      res.textContent = 'Результат: ' + correct + ' из ' + total + (correct===total ? ' • отлично!' : '');
-    });
-  }
-
-  // Чек‑листы (сохранение)
-  const checklistLists = document.querySelectorAll('.checklist');
-  checklistLists.forEach(list=>{
-    const key = 'chk_'+(list.dataset.key||'misc');
-    const saved = JSON.parse(localStorage.getItem(key) || '[]');
-    const inputs = list.querySelectorAll('input[type="checkbox"]');
-    inputs.forEach((inp, i)=> { inp.checked = !!saved[i]; });
-    list.addEventListener('change', ()=>{
-      const arr = Array.from(inputs).map(inp=> inp.checked);
-      localStorage.setItem(key, JSON.stringify(arr));
-    });
-  });
-  const clearBtn = document.getElementById('clearChecklists');
-  if(clearBtn){
-    clearBtn.addEventListener('click', ()=>{
-      checklistLists.forEach(list=>{
-        const inputs = list.querySelectorAll('input[type="checkbox"]');
-        inputs.forEach(inp=> inp.checked=false);
-        const key = 'chk_'+(list.dataset.key||'misc');
-        localStorage.removeItem(key);
-      });
-    });
-  }
-
-  // Страница глоссария
-  const glossaryList = document.getElementById('glossaryList');
-  if(glossaryList){
-    const entries = Object.keys(normGloss).sort();
-    entries.forEach(k=>{
-      const div = document.createElement('div');
-      div.className = 'card';
-      div.innerHTML = `<strong>${k.toUpperCase()}</strong><br><small>${normGloss[k]}</small>`;
-      glossaryList.appendChild(div);
-    });
-  }
-
-  // Клавиатура
-  document.addEventListener('keydown', (e)=>{
-    if(e.target.matches('input, textarea')) return;
-    if(e.key === '/'){ e.preventDefault(); searchInput.focus(); }
-    if(e.key.toLowerCase() === 't'){ themeToggle.click(); }
-    if(e.key.toLowerCase() === 'm'){ menuToggle.click(); }
-  });
-
-  // При загрузке: по умолчанию показываем только раздел "Введение"
-  if(location.hash){
-    const id = location.hash.replace('#','');
-    showOnlySection(id);
-  } else {
-    showOnlySection('intro');
-  }
-})();
-</script>
+</article>
 </body>
 </html>
